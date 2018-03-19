@@ -56,7 +56,12 @@ public class ListValueConv_test {
 		listObj.add("");
 		assertEquals("", ListValueConv.objectListToStringArray(listObj)[0]);
 
-		// @TODO: Case 4: Convert List of numeric values to String array
+		// Case 4: Convert List of numeric values to String array
+		listObj = new ArrayList<Object>();
+		listObj.add(2);
+		listObj.add(2.3);
+		assertEquals("2", ListValueConv.objectListToStringArray(listObj)[0]);
+		assertEquals("2.3", ListValueConv.objectListToStringArray(listObj)[1]);
 	}
 
 	/**
@@ -80,7 +85,12 @@ public class ListValueConv_test {
 		listObj.add("");
 		assertEquals("", ListValueConv.objectToString(listObj).get(0));
 
-		// @TODO: Case 4: Convert List of numeric values to List String
+		// Case 4: Convert List of numeric values to List String
+		listObj = new ArrayList<Object>();
+		listObj.add(2);
+		listObj.add(2.3);
+		assertEquals("2", ListValueConv.objectToString(listObj).get(0));
+		assertEquals("2.3", ListValueConv.objectToString(listObj).get(1));
 	}
 
 	/**
@@ -93,14 +103,16 @@ public class ListValueConv_test {
 		listStr.add("str");
 		listStr.add("str");
 		assertEquals("str", ListValueConv.deduplicateValuesWithoutArrayOrder(listStr).get(0));
-		// @TODO: check length of the new List
+		// Check length of the new List
+		assertEquals(1, ListValueConv.deduplicateValuesWithoutArrayOrder(listStr).size());
 
 		// Case 2: Remove duplicate null values
 		listStr = new ArrayList<String>();
 		listStr.add(null);
 		listStr.add(null);
 		assertNull(ListValueConv.deduplicateValuesWithoutArrayOrder(listStr).get(0));
-		// @TODO: check length of the new List
+		// Check length of the new List
+		assertEquals(1, ListValueConv.deduplicateValuesWithoutArrayOrder(listStr).size());
 	}
 
 	/**
