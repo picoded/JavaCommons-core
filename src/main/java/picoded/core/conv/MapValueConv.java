@@ -21,12 +21,12 @@ public class MapValueConv {
 	/**
 	 * Converts a Map with List values, into array values
 	 **/
-	public static <A, B> Map<A, B[]> listToArray(Map<A, List<B>> source, Map<A, B[]> target,
-		B[] arrayType) {
+	public static <A, B> Map<A, B[]> convertMapOfListToMapOfArray(Map<A, List<B>> source, Map<A, B[]> target,
+																  B[] arrayType) {
 		/**
 		 * Normalize array type to 0 length
 		 **/
-		arrayType = sanatizeArray(arrayType);
+		arrayType = normalizeArrayType(arrayType);
 		
 		for (Map.Entry<A, List<B>> entry : source.entrySet()) {
 			List<B> value = entry.getValue();
@@ -43,8 +43,8 @@ public class MapValueConv {
 	/**
 	 * Converts a Map with List values, into array values. Target map is created using HashMap
 	 **/
-	public static <A, B> Map<A, B[]> listToArray(Map<A, List<B>> source, B[] arrayType) {
-		return listToArray(source, new HashMap<A, B[]>(), arrayType);
+	public static <A, B> Map<A, B[]> convertMapOfListToMapOfArray(Map<A, List<B>> source, B[] arrayType) {
+		return convertMapOfListToMapOfArray(source, new HashMap<A, B[]>(), arrayType);
 	}
 	
 	/**
@@ -55,7 +55,7 @@ public class MapValueConv {
 		/**
 		 * Normalize array type to 0 length
 		 **/
-		arrayType = sanatizeArray(arrayType);
+		arrayType = normalizeArrayType(arrayType);
 		/**
 		 * Convert values
 		 **/
@@ -286,9 +286,19 @@ public class MapValueConv {
 		}
 		return sourceList;
 	}
-	
-	protected static <B> B[] sanatizeArray(B[] in) {
+
+	/**
+	 * Returns a length zero array that has a specific type B.
+	 * This method is necessary due to some complication of Java concerning how Java treats Map objects during run time.
+	 * One of the use cases is when we want to specify the object type for a key in a Map object.
+	 *
+	 * @param in the array type to be specified
+	 * @return a length 0 array or null
+	 */
+	protected static <B> B[] normalizeArrayType(B[] in) {
 		if (in != null && in.length > 0) {
+			// The reason why we want to do this is because of
+			// https://docs.oracle.com/javase/8/docs/api/java/util/List.html#toArray--
 			in = Arrays.copyOfRange(in, 0, 0);
 		}
 		return in;

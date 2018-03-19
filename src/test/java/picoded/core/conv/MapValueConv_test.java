@@ -18,12 +18,14 @@ import picoded.core.file.FileUtil;
 
 public class MapValueConv_test {
 	
-	//
-	// Temp vars - To setup
-	//
+	/**
+	 * Temp vars - To setup
+	 */
 	Map<String, Object> unqualifiedMap;
-	
-	/// Setup the temp vars
+
+	/**
+	 * Setup the temp vars
+	 */
 	@Before
 	public void setUp() {
 		unqualifiedMap = new HashMap<String, Object>();
@@ -34,18 +36,23 @@ public class MapValueConv_test {
 		
 	}
 	
-	//
-	// Expected exception testing
-	//
-	
-	/// Invalid constructor test
+	///
+	///  Expected exception testing
+	///
+
+	/**
+	 * Invalid constructor test
+	 */
 	@Test(expected = IllegalAccessError.class)
 	public void invalidConstructor() throws Exception {
 		new MapValueConv();
 	}
-	
+
+	/**
+	 * Simple conversion of qualified keys function
+	 */
 	@Test
-	public void testTo() {
+	public void toFullyQualifiedKeysTest() {
 		File unqualifiedMapFile = new File("./test/Conv/unqualifiedMap.js");
 		String jsonString = FileUtil.readFileToString(unqualifiedMapFile);
 		unqualifiedMap = ConvertJSON.toMap(jsonString);
@@ -63,10 +70,13 @@ public class MapValueConv_test {
 		assertEquals("23456", qualifiedMap.get("clients[1].nric"));
 		assertEquals("34567", qualifiedMap.get("clients[2].nric"));
 	}
-	
+
+	/**
+	 * Simple Conversion of fully qualified names into nested object
+	 */
 	@Test
 	@SuppressWarnings("unchecked")
-	public void testFrom() {
+	public void fromFullyQualifiedKeysTest() {
 		Map<String, Object> unqualifiedMap = new HashMap<String, Object>();
 		
 		File unqualifiedMapFile = new File("./test/Conv/unqualifiedMap.js");
@@ -97,9 +107,11 @@ public class MapValueConv_test {
 		innerMap = (Map<String, Object>) innerList.get(2);
 		assertEquals("Murong", innerMap.get("name"));
 		assertEquals("34567", innerMap.get("nric"));
-		
 	}
-	
+
+	/**
+	 * Complex test case for nested objects of an object
+	 */
 	@Test
 	public void chaosMonkeyFinal() {
 		File chaosMonkeyFile = new File("./test/Conv/chaosmonkey.js");
@@ -110,13 +122,18 @@ public class MapValueConv_test {
 		
 		Map<String, Object> qualifiedChaosMap = MapValueConv.toFullyQualifiedKeys(jsonMap, "", ".");
 		assertNotNull(qualifiedChaosMap);
-		
+		// TODO: Add additional checks to verify
+
 		Map<String, Object> unqualifiedChaosMap = MapValueConv
 			.fromFullyQualifiedKeys(qualifiedChaosMap);
 		assertNotNull(unqualifiedChaosMap);
+		// TODO: Add additional checks to verify
 		
 	}
-	
+
+	/**
+	 * Convert list to array
+	 */
 	@Test
 	public void listToArrayTest() {
 		Map<Object, List<Object>> map = new HashMap<Object, List<Object>>();
@@ -124,6 +141,8 @@ public class MapValueConv_test {
 		map.put("test", null);
 		mapArrayObj = MapValueConv.listToArray(map, null);
 		assertNotNull(mapArrayObj);
+
+		// TODO: not sure what is this for
 		List<Object> list = new ArrayList<Object>();
 		list.add("abc");
 		map.put("test", list);
