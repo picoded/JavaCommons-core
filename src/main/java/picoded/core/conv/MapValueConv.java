@@ -88,7 +88,16 @@ public class MapValueConv {
 		
 		return finalMap;
 	}
-	
+
+	/**
+	 * Recursively loop through the source object to form the absolute path to every single item and place them
+	 * inside a Map<String, Object> to return back to the user.
+	 *
+	 * @param source The source to loop through
+	 * @param rootName The current naming path
+	 * @param separator The delimiter to seperate each level
+	 * @return a Map of absolute paths
+	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> toFullyQualifiedKeys(Object source, String rootName,
 		String separator) {
@@ -106,21 +115,27 @@ public class MapValueConv {
 			List<Object> sourceList = (List<Object>) source;
 			
 			int counter = 0;
+
+			// For each of the object in the source list
 			for (Object obj : sourceList) {
 				parentName = getRootName(rootName, counter);
 				if (obj instanceof List) {
+					// Recursively loop through the object for inner keys
 					fullyQualifiedMap.putAll(toFullyQualifiedKeys(obj, parentName, separator));
 					++counter;
 					
 				}
 				if (obj instanceof Map) {
+					// Calls the method to indicate the keys properly for a map object
 					Map<String, Object> objMap = (Map<String, Object>) obj;
 					fullyQualifiedMap = getFullyQualifiedMap(fullyQualifiedMap, objMap, rootName,
 						parentName, counter, separator);
 					counter = (int) fullyQualifiedMap.get("counter");
 				}
 			}
+
 		} else if (source instanceof Map) {
+			// @TODO: similar code detected as getFullyQualifiedMap
 			Map<String, Object> sourceMap = (Map<String, Object>) source;
 			for (Map.Entry<String, Object> sourceMapKey : sourceMap.entrySet()) {
 				if (rootName.isEmpty()) {
@@ -140,14 +155,32 @@ public class MapValueConv {
 		
 		return fullyQualifiedMap;
 	}
-	
+
+	/**
+	 * Format the absolute name into array-like view
+	 *
+	 * @param rootName existing rootName or empty String
+	 * @param counter current value's index
+	 * @return full path to the value
+	 */
 	private static String getRootName(String rootName, Integer counter) {
 		if (!rootName.isEmpty()) {
 			return rootName + "[" + counter + "]";
 		}
 		return "";
 	}
-	
+
+	/**
+	 * Produce the full pathing of the keys in the map
+	 *
+	 * @param fullyQualifiedMap the current map to store
+	 * @param objMap object to loop through
+	 * @param rootName current root path
+	 * @param parentName current parentName
+	 * @param counter current counter
+	 * @param separator the delimiter
+	 * @return
+	 */
 	private static Map<String, Object> getFullyQualifiedMap(Map<String, Object> fullyQualifiedMap,
 		Map<String, Object> objMap, String rootName, String parentName, int counter, String separator) {
 		for (Map.Entry<String, Object> objMapKey1 : objMap.entrySet()) {
@@ -156,6 +189,7 @@ public class MapValueConv {
 			} else {
 				parentName = rootName + "[" + counter + "]" + separator + objMapKey1.getKey();
 			}
+			// Recursively loop through the object for inner keys
 			fullyQualifiedMap.putAll(toFullyQualifiedKeys(objMap.get(objMapKey1.getKey()), parentName,
 				separator));
 		}
