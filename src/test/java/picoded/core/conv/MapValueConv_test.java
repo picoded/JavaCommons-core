@@ -161,11 +161,27 @@ public class MapValueConv_test {
 		mapArrayObj = MapValueConv.convertMapOfListToMapOfArray(map, null);
 		assertNotNull(mapArrayObj);
 
-		// TODO: not sure what is this for
+		// Case 1: Map has null list
+		Object[] testArray = mapArrayObj.get("test");
+		assertTrue(testArray == null);
+
+		// Case 2: Map has list with two values
+		List<Object> values = new ArrayList<>();
+		values.add("firstValue");
+		values.add("secondValue");
+		map.put("test2", values);
+		mapArrayObj = MapValueConv.convertMapOfListToMapOfArray(map, new String[]{});
+		Object[] valuesArray = mapArrayObj.get("test2");
+		assertTrue(valuesArray.length == 2);
+
+		// Case 3: ArrayType is not being used
 		List<Object> list = new ArrayList<Object>();
 		list.add("abc");
 		map.put("test", list);
-		mapArrayObj = MapValueConv.convertMapOfListToMapOfArray(map, new String[] { "abc" });
+		mapArrayObj = MapValueConv.convertMapOfListToMapOfArray(map, new String[] { "def" });
+		Object[] resultArray = mapArrayObj.get("test");
+		assertTrue(resultArray.length == 1);
+		assertEquals("abc", resultArray[0]);
 	}
 	
 	@Test
