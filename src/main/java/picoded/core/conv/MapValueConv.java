@@ -98,7 +98,7 @@ public class MapValueConv {
 	 * @param delimiter The delimiter to seperate each level
 	 * @return a Map of absolute paths
 	 */
-	public static Map<String, Object> generateAbsoluteFullPathAndValues(Object source, String parentName, String delimiter){
+	public static Map<String, Object> convertToFullyQualifyNames(Object source, String parentName, String delimiter){
 		// Create a temporary storage for the full paths
 		Map<String, Object> currentFullPaths = new HashMap<>();
 
@@ -118,7 +118,7 @@ public class MapValueConv {
 				String currentName = (parentName.isEmpty()) ? key : parentName + delimiter + key;
 
 				// Call recursively to check for the object type
-				currentFullPaths.putAll(generateAbsoluteFullPathAndValues(sourceMap.get(key), currentName, delimiter));
+				currentFullPaths.putAll(convertToFullyQualifyNames(sourceMap.get(key), currentName, delimiter));
 			}
 
 		// Object is a List object, traverse each object and tag with indices
@@ -130,7 +130,7 @@ public class MapValueConv {
 				String currentName = parentName + "[" + index + "]";
 
 				// Call recursively to check for the object type
-				currentFullPaths.putAll(generateAbsoluteFullPathAndValues(object, currentName, delimiter));
+				currentFullPaths.putAll(convertToFullyQualifyNames(object, currentName, delimiter));
 				// Increment the index
 				index++;
 			}
