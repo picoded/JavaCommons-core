@@ -103,8 +103,8 @@ public class MapValueConv {
 		Map<String, Object> currentFullPaths = new HashMap<>();
 
 		// Preset variables if it does not exist
-		delimiter  = (delimiter.isEmpty()) ? "." : delimiter;
-		parentName = (parentName.isEmpty()) ? "" : parentName;
+		delimiter  = (delimiter == null || delimiter.isEmpty()) ? "." : delimiter;
+		parentName = (parentName == null || parentName.isEmpty()) ? "" : parentName;
 
 		// Tag numbers directly to the path
 		if(source instanceof Number){
