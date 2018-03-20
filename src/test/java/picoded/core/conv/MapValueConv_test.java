@@ -87,23 +87,28 @@ public class MapValueConv_test {
 		
 		unqualifiedMap.clear();
 		unqualifiedMap = MapValueConv.fromFullyQualifiedKeys(qualifiedMap);
-		
+
+		// Retrieve singular value from map
 		assertNotNull(unqualifiedMap);
 		assertEquals("1", unqualifiedMap.get("agentID"));
-		
+
+		// Retrieve list from map
 		assertTrue(unqualifiedMap.get("clients") instanceof List);
 		List<Object> innerList = (List<Object>) unqualifiedMap.get("clients");
 		assertTrue(innerList.size() == 3);
-		
+
+		// Retrieve object from the list in the map
 		Map<String, Object> innerMap = null;
 		innerMap = (Map<String, Object>) innerList.get(0);
 		assertEquals("Sam", innerMap.get("name"));
 		assertEquals("12345", innerMap.get("nric"));
-		
+
+		// Verify the records
 		innerMap = (Map<String, Object>) innerList.get(1);
 		assertEquals("Eugene", innerMap.get("name"));
 		assertEquals("23456", innerMap.get("nric"));
-		
+
+		// Verify the records
 		innerMap = (Map<String, Object>) innerList.get(2);
 		assertEquals("Murong", innerMap.get("name"));
 		assertEquals("34567", innerMap.get("nric"));
@@ -122,15 +127,26 @@ public class MapValueConv_test {
 		
 		Map<String, Object> qualifiedChaosMap = MapValueConv.convertToFullyQualifyNames(jsonMap, "", ".");
 		assertNotNull(qualifiedChaosMap);
-		// TODO: Add additional checks to verify
+
+		// Retrieve some values to check it
 		assertEquals("mapValueM", qualifiedChaosMap.get("mapListA[0].mapListB[0].mapListC[0].mapListD[2].mapKeyM"));
 		assertEquals("mapValueL", qualifiedChaosMap.get("mapListA[0].mapListB[0].mapListC[0].mapListD[1].mapKeyL"));
 		assertEquals("mapLayeredValueE", qualifiedChaosMap.get("mapLayeredList[1][0][1][0].mapLayeredKeyE"));
 
 		Map<String, Object> unqualifiedChaosMap = MapValueConv
 			.fromFullyQualifiedKeys(qualifiedChaosMap);
+		System.out.println(ConvertJSON.fromObject(unqualifiedChaosMap));
 		assertNotNull(unqualifiedChaosMap);
-		// TODO: Add additional checks to verify
+
+		// Grab one of the layered objects and forms a check
+		List<Object> mapLayeredList = (List<Object>) unqualifiedChaosMap.get("mapLayeredList");
+		assertNotNull(mapLayeredList);
+		assertTrue(mapLayeredList.size() == 2);
+		List<Object> mapLayeredKeys = (List<Object>) mapLayeredList.get(0);
+		List<Object> mapLayeredKeysCandB = (List<Object>) mapLayeredKeys.get(1);
+		Map<String, Object> keyC = (Map<String, Object>) mapLayeredKeysCandB.get(0);
+		assertEquals("mapLayeredValueC", keyC.get("mapLayeredKeyC"));
+
 		
 	}
 
