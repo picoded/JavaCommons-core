@@ -52,13 +52,13 @@ public class MapValueConv_test {
 	 * Simple conversion of qualified keys function
 	 */
 	@Test
-	public void toFullyQualifiedKeysTest() {
+	public void simpleToFullyQualifiedKeysTest() {
 		File unqualifiedMapFile = new File("./test/Conv/unqualifiedMap.js");
 		String jsonString = FileUtil.readFileToString(unqualifiedMapFile);
 		unqualifiedMap = ConvertJSON.toMap(jsonString);
 		
-		Map<String, Object> qualifiedMap = MapValueConv.toFullyQualifiedKeys(unqualifiedMap, "", ".");
-		
+		Map<String, Object> qualifiedMap = MapValueConv.generateAbsoluteFullPathAndValues(unqualifiedMap, "", ".");
+
 		assertNotNull(qualifiedMap);
 		assertEquals("1", qualifiedMap.get("agentID"));
 		
@@ -83,7 +83,7 @@ public class MapValueConv_test {
 		String jsonString = FileUtil.readFileToString(unqualifiedMapFile);
 		unqualifiedMap = ConvertJSON.toMap(jsonString);
 		
-		Map<String, Object> qualifiedMap = MapValueConv.toFullyQualifiedKeys(unqualifiedMap, "", ".");
+		Map<String, Object> qualifiedMap = MapValueConv.generateAbsoluteFullPathAndValues(unqualifiedMap, "", ".");
 		
 		unqualifiedMap.clear();
 		unqualifiedMap = MapValueConv.fromFullyQualifiedKeys(qualifiedMap);
@@ -120,9 +120,12 @@ public class MapValueConv_test {
 		
 		Map<String, Object> jsonMap = ConvertJSON.toMap(jsonString);
 		
-		Map<String, Object> qualifiedChaosMap = MapValueConv.toFullyQualifiedKeys(jsonMap, "", ".");
+		Map<String, Object> qualifiedChaosMap = MapValueConv.generateAbsoluteFullPathAndValues(jsonMap, "", ".");
 		assertNotNull(qualifiedChaosMap);
 		// TODO: Add additional checks to verify
+		assertEquals("mapValueM", qualifiedChaosMap.get("mapListA[0].mapListB[0].mapListC[0].mapListD[2].mapKeyM"));
+		assertEquals("mapValueL", qualifiedChaosMap.get("mapListA[0].mapListB[0].mapListC[0].mapListD[1].mapKeyL"));
+		assertEquals("mapLayeredValueE", qualifiedChaosMap.get("mapLayeredList[1][0][1][0].mapLayeredKeyE"));
 
 		Map<String, Object> unqualifiedChaosMap = MapValueConv
 			.fromFullyQualifiedKeys(qualifiedChaosMap);
@@ -135,18 +138,18 @@ public class MapValueConv_test {
 	 * Convert list to array
 	 */
 	@Test
-	public void listToArrayTest() {
+	public void convertMapOfListToMapOfArrayTest() {
 		Map<Object, List<Object>> map = new HashMap<Object, List<Object>>();
 		Map<Object, Object[]> mapArrayObj = null;
 		map.put("test", null);
-		mapArrayObj = MapValueConv.listToArray(map, null);
+		mapArrayObj = MapValueConv.convertMapOfListToMapOfArray(map, null);
 		assertNotNull(mapArrayObj);
 
 		// TODO: not sure what is this for
 		List<Object> list = new ArrayList<Object>();
 		list.add("abc");
 		map.put("test", list);
-		mapArrayObj = MapValueConv.listToArray(map, new String[] { "abc" });
+		mapArrayObj = MapValueConv.convertMapOfListToMapOfArray(map, new String[] { "abc" });
 	}
 	
 	@Test
@@ -163,17 +166,17 @@ public class MapValueConv_test {
 	
 	@Test
 	public void toFullyQualifiedKeysTest() {
-		assertNotNull(MapValueConv.toFullyQualifiedKeys(123, null, new String()));
-		assertNotNull(MapValueConv.toFullyQualifiedKeys("abc", null, new String()));
+		assertNotNull(MapValueConv.generateAbsoluteFullPathAndValues(123, null, new String()));
+		assertNotNull(MapValueConv.generateAbsoluteFullPathAndValues("abc", null, new String()));
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("abc", "xyz");
-		assertNotNull(MapValueConv.toFullyQualifiedKeys(map, null, new String()));
-		assertNotNull(MapValueConv.toFullyQualifiedKeys(map, "abc", new String()));
+		assertNotNull(MapValueConv.generateAbsoluteFullPathAndValues(map, null, new String()));
+		assertNotNull(MapValueConv.generateAbsoluteFullPathAndValues(map, "abc", new String()));
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		map = new HashMap<String, Object>();
 		map.put("abc", "test");
 		list.add(map);
-		assertNotNull(MapValueConv.toFullyQualifiedKeys(list, null, new String()));
+		assertNotNull(MapValueConv.generateAbsoluteFullPathAndValues(list, null, new String()));
 		
 	}
 	
