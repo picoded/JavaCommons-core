@@ -93,7 +93,11 @@ public class MapValueConv_test {
 		map.put("abc", "test");
 		list.add(map);
 		map = MapValueConv.convertToFullyQualifyNames(list, null, new String());
-		System.out.println(ConvertJSON.fromObject(map));
+
+		assertEquals("test", map.get("[0].abc"));
+
+		// Null delimiter
+		map = MapValueConv.convertToFullyQualifyNames(list, null, null);
 		assertEquals("test", map.get("[0].abc"));
 	}
 
@@ -161,7 +165,7 @@ public class MapValueConv_test {
 
 		Map<String, Object> unqualifiedChaosMap = MapValueConv
 			.fromFullyQualifiedKeys(qualifiedChaosMap);
-		System.out.println(ConvertJSON.fromObject(unqualifiedChaosMap));
+
 		assertNotNull(unqualifiedChaosMap);
 
 		// Grab one of the layered objects and forms a check
