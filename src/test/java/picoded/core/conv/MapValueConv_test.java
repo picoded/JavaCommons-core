@@ -69,6 +69,32 @@ public class MapValueConv_test {
 		assertEquals("12345", qualifiedMap.get("clients[0].nric"));
 		assertEquals("23456", qualifiedMap.get("clients[1].nric"));
 		assertEquals("34567", qualifiedMap.get("clients[2].nric"));
+
+
+		// Single numeric test
+		Map<String, Object> map = MapValueConv.convertToFullyQualifyNames(123, null, new String());
+		assertNotNull(map);
+		assertEquals(123, map.get(""));
+
+		// Single string test
+		map = MapValueConv.convertToFullyQualifyNames("abc", null, new String());
+		assertNotNull(map);
+		assertEquals("abc", map.get(""));
+
+		// Simple map test
+		map = new HashMap<String, Object>();
+		map.put("abc", "xyz");
+		map = MapValueConv.convertToFullyQualifyNames(map, "abc", new String());
+		assertEquals("xyz", map.get("abc.abc"));
+
+		// Simple list test
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		map = new HashMap<String, Object>();
+		map.put("abc", "test");
+		list.add(map);
+		map = MapValueConv.convertToFullyQualifyNames(list, null, new String());
+		System.out.println(ConvertJSON.fromObject(map));
+		assertEquals("test", map.get("[0].abc"));
 	}
 
 	/**
@@ -183,64 +209,64 @@ public class MapValueConv_test {
 		assertTrue(resultArray.length == 1);
 		assertEquals("abc", resultArray[0]);
 	}
-	
+
+	/**
+	 * single value to array test
+	 */
 	@Test
 	public void singleToArrayTest() {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		Map<Object, Object[]> mapArrayObj = null;
 		map.put("test", null);
+		// Case 1: Null test
 		mapArrayObj = MapValueConv.singleToArray(map, new String[] {});
 		assertNotNull(mapArrayObj);
+		Object[] testArray = mapArrayObj.get("test");
+		assertTrue(testArray.length == 1);
+		assertTrue(testArray[0] == null);
+
+		// Case 2: Single value to array
 		map.put("test", "abc");
-		mapArrayObj = MapValueConv.singleToArray(map, new String[] { "abc" });
+		mapArrayObj = MapValueConv.singleToArray(map, new String[] { "def" });
 		assertNotNull(mapArrayObj);
+		Object[] resultArray = mapArrayObj.get("test");
+		assertTrue(resultArray.length == 1);
+		assertEquals("abc", resultArray[0]);
 	}
-	
-	@Test
-	public void toFullyQualifiedKeysTest() {
-		assertNotNull(MapValueConv.convertToFullyQualifyNames(123, null, new String()));
-		assertNotNull(MapValueConv.convertToFullyQualifyNames("abc", null, new String()));
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("abc", "xyz");
-		assertNotNull(MapValueConv.convertToFullyQualifyNames(map, null, new String()));
-		assertNotNull(MapValueConv.convertToFullyQualifyNames(map, "abc", new String()));
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		map = new HashMap<String, Object>();
-		map.put("abc", "test");
-		list.add(map);
-		assertNotNull(MapValueConv.convertToFullyQualifyNames(list, null, new String()));
-		
-	}
-	
+
+	/**
+	 * recreate object from qualified maps
+	 */
 	@Test
 	public void recreateObjectTest() {
-		
 		Map<String, Object> unqualifiedMap = new HashMap<String, Object>();
-		assertNotNull(MapValueConv.fromFullyQualifiedKeys(unqualifiedMap));
+		// Fully qualified map
+		Map<String, Object> qualifiedMap = new HashMap<String, Object>();
+
+		// Empty Map
+		unqualifiedMap = MapValueConv.fromFullyQualifiedKeys(qualifiedMap);
+		assertNotNull(unqualifiedMap);
+
+		File unqualifiedMapFile = new File("./test/Conv/unqualifiedMap.js");
+		String jsonString = FileUtil.readFileToString(unqualifiedMapFile);
+
+		unqualifiedMap = ConvertJSON.toMap(jsonString);
+		qualifiedMap = MapValueConv.convertToFullyQualifyNames(unqualifiedMap, "", ".");
+		// Convert back to unqualifiedMap from fullyQualifiedMap
+		unqualifiedMap = MapValueConv.fromFullyQualifiedKeys(qualifiedMap);
+
+		// Value in map
+		assertEquals("1", unqualifiedMap.get("agentID"));
+
+		// Recreation of object convert into list instead of array
+		assertTrue(unqualifiedMap.get("clients") instanceof List);
+		// List in map
+		List<Object> clients = ((List<Object>) unqualifiedMap.get("clients"));
+		assertTrue(clients.size() == 3);
 		
-		unqualifiedMap.put("", "");
-		assertNotNull(MapValueConv.fromFullyQualifiedKeys(unqualifiedMap));
-		
-		unqualifiedMap = new HashMap<String, Object>();
-		unqualifiedMap.put("[]", "");
-		assertNotNull(MapValueConv.fromFullyQualifiedKeys(unqualifiedMap));
-		
-		unqualifiedMap = new HashMap<String, Object>();
-		unqualifiedMap.put(".", "");
-		assertNotNull(MapValueConv.fromFullyQualifiedKeys(unqualifiedMap));
-		
-		unqualifiedMap = new HashMap<String, Object>();
-		unqualifiedMap.put(".[]", "");
-		assertNotNull(MapValueConv.fromFullyQualifiedKeys(unqualifiedMap));
-		
-		unqualifiedMap = new HashMap<String, Object>();
-		unqualifiedMap.put("test[0].12test", "");
-		assertNotNull(MapValueConv.fromFullyQualifiedKeys(unqualifiedMap));
-		
-		unqualifiedMap = new HashMap<String, Object>();
-		unqualifiedMap.put("aa[0].aa", "");
-		unqualifiedMap.put("[t].", "");
-		assertNotNull(MapValueConv.fromFullyQualifiedKeys(unqualifiedMap));
-		
+		// Obtain the object value in array
+		Map<String, Object> client = (Map<String, Object>) clients.get(0);
+		assertEquals("Sam", client.get("name"));
+		assertEquals("12345", client.get("nric"));
 	}
 }
