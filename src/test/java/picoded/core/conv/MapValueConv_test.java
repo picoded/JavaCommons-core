@@ -95,6 +95,10 @@ public class MapValueConv_test {
 		map = MapValueConv.convertToFullyQualifyNames(list, null, new String());
 
 		assertEquals("test", map.get("[0].abc"));
+
+		// Null delimiter
+		map = MapValueConv.convertToFullyQualifyNames(list, null, null);
+		assertEquals("test", map.get("[0].abc"));
 	}
 
 	/**
