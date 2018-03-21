@@ -80,7 +80,7 @@ public class HashMapList<K, V> extends HashMap<K, List<V>> implements GenericCon
 	 * @return   the flatten map array
 	 **/
 	public Map<K, V[]> toMapArray(V[] arrayType) {
-		return MapValueConv.listToArray(this, arrayType);
+		return MapValueConv.convertMapOfListToMapOfArray(this, arrayType);
 	}
 	
 }

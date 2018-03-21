@@ -26,9 +26,9 @@ public class ListValueConv_test {
 		
 	}
 	
-	//
-	// Expected exception testing
-	//
+	/**
+	 * Expected exception testing
+	 */
 	
 	/// Invalid constructor test
 	@Test(expected = IllegalAccessError.class)
@@ -36,45 +36,88 @@ public class ListValueConv_test {
 		new ListValueConv();
 		
 	}
-	
+
+	/**
+	 * Convert List of objects to string array
+	 */
 	@Test
 	public void objectListToStringArray() {
+		// Case 1: Value of the converted array with index 0
 		listObj.add("str");
 		assertEquals("str", ListValueConv.objectListToStringArray(listObj)[0]);
+
+		// Case 2: Null test after conversion
 		listObj = new ArrayList<Object>();
 		listObj.add(null);
 		assertNull(ListValueConv.objectListToStringArray(listObj)[0]);
+
+		// Case 3: Empty String in the list
 		listObj = new ArrayList<Object>();
 		listObj.add("");
 		assertEquals("", ListValueConv.objectListToStringArray(listObj)[0]);
+
+		// Case 4: Convert List of numeric values to String array
+		listObj = new ArrayList<Object>();
+		listObj.add(2);
+		listObj.add(2.3);
+		assertEquals("2", ListValueConv.objectListToStringArray(listObj)[0]);
+		assertEquals("2.3", ListValueConv.objectListToStringArray(listObj)[1]);
 	}
-	
+
+	/**
+	 * Convert object to String
+	 */
 	@Test
 	public void objectToString() {
+
+		// Case 1: Convert List object to List String
 		listObj = new ArrayList<Object>();
 		listObj.add("str");
 		assertEquals("str", ListValueConv.objectToString(listObj).get(0));
+
+		// Case 2: Convert List of null value to List String
 		listObj = new ArrayList<Object>();
 		listObj.add(null);
 		assertNull(ListValueConv.objectToString(listObj).get(0));
+
+		// Case 3: Convert empty String in List to List String
 		listObj = new ArrayList<Object>();
 		listObj.add("");
 		assertEquals("", ListValueConv.objectToString(listObj).get(0));
+
+		// Case 4: Convert List of numeric values to List String
+		listObj = new ArrayList<Object>();
+		listObj.add(2);
+		listObj.add(2.3);
+		assertEquals("2", ListValueConv.objectToString(listObj).get(0));
+		assertEquals("2.3", ListValueConv.objectToString(listObj).get(1));
 	}
-	
+
+	/**
+	 * Removal of duplicate values in list
+	 */
 	@Test
 	public void deduplicateValuesWithoutArrayOrder() {
+		// Case 1: Remove duplicate values
 		List<String> listStr = new ArrayList<String>();
 		listStr.add("str");
 		listStr.add("str");
 		assertEquals("str", ListValueConv.deduplicateValuesWithoutArrayOrder(listStr).get(0));
-		
+		// Check length of the new List
+		assertEquals(1, ListValueConv.deduplicateValuesWithoutArrayOrder(listStr).size());
+
+		// Case 2: Remove duplicate null values
 		listStr = new ArrayList<String>();
 		listStr.add(null);
 		listStr.add(null);
 		assertNull(ListValueConv.deduplicateValuesWithoutArrayOrder(listStr).get(0));
+		// Check length of the new List
+		assertEquals(1, ListValueConv.deduplicateValuesWithoutArrayOrder(listStr).size());
 	}
-	
+
+	/**
+	 * Convert List into Set String
+	 */
 	@Test
 	public void toStringSet() {
 		List<String> listStr = new ArrayList<String>();
