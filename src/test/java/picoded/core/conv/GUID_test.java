@@ -7,9 +7,9 @@ import org.junit.*;
 // Java libs used
 import java.util.UUID;
 
-///
-/// Test Case for picoded.core.struct.CaseInsensitiveHashMap
-///
+/**
+ * Test Case for picoded.core.struct.CaseInsensitiveHashMap
+ */
 public class GUID_test {
 	
 	// Test run multiplier
@@ -21,9 +21,9 @@ public class GUID_test {
 		new GUID();
 	}
 	
-	///
-	/// GUID basic tests
-	///
+	/**
+	 * GUID basic tests
+	 */
 	@Test
 	public void guidTestSet() {
 		
