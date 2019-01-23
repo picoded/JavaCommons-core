@@ -553,6 +553,15 @@ class RequestHttpClient_base {
 		return executeMultipartRequest("DELETE", reqUrl, paramsMap, filesMap, cookiesMap, headersMap);
 	}
 
+	/**
+	 * * Performs DELETE request : using json request with json object or map or list
+	 *
+	 * @param   Request URL to call
+	 * @param   jsonObj    [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return  ResponseHttp object
+	 */
 	public ResponseHttp httpPatchJSON(String reqUrl, //
 		Object jsonObj, //
 		Map<String, String[]> cookiesMap, //

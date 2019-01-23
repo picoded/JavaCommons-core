@@ -651,6 +651,15 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 		);
 	}
 
+	/**
+	 * Performs PATCH request : with json parameters that can be map or list or json object
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return
+	 */
 	public ResponseHttp patchJSON(//
 		String reqUrl, //
 		Object params, //
