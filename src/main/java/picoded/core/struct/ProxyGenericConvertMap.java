@@ -27,6 +27,29 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 		return new ProxyGenericConvertMap<A, B>(inMap);
 	}
 	
+	/**
+	 * The static builder for the map - that helps ensure the output is a ProxyGenericConvertMap
+	 * 
+	 * @return  ProxyGenericConvertMap equivalent of the given map
+	 **/
+	public static <T extends ProxyGenericConvertMap, A, B> T ensure(Class<T> classObj, Map<A,B> inMap) {
+		// Instance of match
+		if (classObj.isInstance(inMap)) {
+			return (T) inMap;
+		}
+		
+		// Remapping
+		try {
+			T ret = classObj.newInstance();
+			ret.internalMap(inMap);
+			return ret;
+		} catch (InstantiationException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	// ------------------------------------------------------
 	//
 	// Constructors
@@ -45,7 +68,7 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 **/
 	@SuppressWarnings("unchecked")
 	public ProxyGenericConvertMap(Map<? extends K, ? extends V> m) {
-		this._decoratedMap = (Map<K,V>)(Object)m;
+		this._decoratedMap = (Map<K, V>) (Object) m;
 	}
 	
 	// ------------------------------------------------------
@@ -58,7 +81,7 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 * Increasing access scope of internal collection
 	 */
 	protected transient Map<K, V> _decoratedMap;
-
+	
 	/**
 	 * Gets the collection being decorated.
 	 * All access to the decorated collection goes via this method.
@@ -68,7 +91,7 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	protected Map<K, V> decorated() {
 		return _decoratedMap;
 	}
-
+	
 	// ------------------------------------------------------
 	//
 	// Internal map handling
@@ -101,17 +124,17 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	public V get(final Object key) {
 		return decorated().get(key);
 	}
-
+	
 	@Override
 	public V put(final K key, final V value) {
 		return decorated().put(key, value);
 	}
-
+	
 	@Override
 	public V remove(final Object key) {
 		return decorated().remove(key);
 	}
-
+	
 	@Override
 	public Set<K> keySet() {
 		return decorated().keySet();
@@ -127,42 +150,42 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	public void clear() {
 		decorated().clear();
 	}
-
+	
 	@Override
 	public boolean containsKey(final Object key) {
 		return decorated().containsKey(key);
 	}
-
+	
 	@Override
 	public boolean containsValue(final Object value) {
 		return decorated().containsValue(value);
 	}
-
+	
 	@Override
 	public Set<Map.Entry<K, V>> entrySet() {
 		return decorated().entrySet();
 	}
-
+	
 	@Override
 	public boolean isEmpty() {
 		return decorated().isEmpty();
 	}
-
+	
 	@Override
 	public void putAll(final Map<? extends K, ? extends V> mapToCopy) {
 		decorated().putAll(mapToCopy);
 	}
-
+	
 	@Override
 	public int size() {
 		return decorated().size();
 	}
-
+	
 	@Override
 	public Collection<V> values() {
 		return decorated().values();
 	}
-
+	
 	@Override
 	public boolean equals(final Object object) {
 		if (object == this) {
@@ -170,12 +193,12 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 		}
 		return decorated().equals(object);
 	}
-
+	
 	@Override
 	public int hashCode() {
 		return decorated().hashCode();
 	}
-
+	
 	// ------------------------------------------------------
 	//
 	// String support
