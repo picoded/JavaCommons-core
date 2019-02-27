@@ -37,7 +37,7 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 * Constructor
 	 **/
 	public ProxyGenericConvertMap() {
-		this.map = new HashMap<>();
+		this._decoratedMap = new HashMap<>();
 	}
 	
 	/**
@@ -45,19 +45,19 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 **/
 	@SuppressWarnings("unchecked")
 	public ProxyGenericConvertMap(Map<? extends K, ? extends V> m) {
-		this.map = (Map<K,V>)(Object)m;
+		this._decoratedMap = (Map<K,V>)(Object)m;
 	}
 	
 	// ------------------------------------------------------
 	//
-	// Increase the access scope level of decorated()
+	// decorated() function (backwards compatiblity)
 	//
 	// ------------------------------------------------------
 	
 	/**
 	 * Increasing access scope of internal collection
 	 */
-	protected transient Map<K, V> map;
+	protected transient Map<K, V> _decoratedMap;
 
 	/**
 	 * Gets the collection being decorated.
@@ -66,7 +66,7 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 * @return the decorated collection
 	 */
 	protected Map<K, V> decorated() {
-		return map;
+		return _decoratedMap;
 	}
 
 	// ------------------------------------------------------
@@ -80,7 +80,7 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 * @return underlying storage map
 	 */
 	public Map<K, V> internalMap() {
-		return this.map;
+		return this._decoratedMap;
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 * @param inMap to configure as underlying storage map
 	 */
 	public void internalMap(Map<K, V> inMap) {
-		this.map = inMap;
+		this._decoratedMap = inMap;
 	}
 	
 	// ------------------------------------------------------
