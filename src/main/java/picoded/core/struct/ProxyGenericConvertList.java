@@ -19,7 +19,32 @@ import picoded.core.conv.GenericConvert;
 public class ProxyGenericConvertList<V> extends AbstractListDecorator<V> implements
 	GenericConvertList<V> {
 	
+	/**
+	 * The static builder for the list - that helps ensure the output is a GenericConvertList
+	 * 
+	 * @return  GenericConvertList equivalent of the given List
+	 **/
+	public static <V> GenericConvertList<V> ensure(List<V> inList) {
+		if (inList instanceof GenericConvertList) { // <V>
+			return (GenericConvertList<V>) inList;
+		}
+		return new ProxyGenericConvertList<V>(inList);
+	}
+	
+	// ------------------------------------------------------
+	//
+	// Constructors
+	//
+	// ------------------------------------------------------
+	
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Constructor
+	 **/
+	public ProxyGenericConvertList() {
+		super();
+	}
 	
 	/**
 	 * Protected constructor
@@ -28,15 +53,33 @@ public class ProxyGenericConvertList<V> extends AbstractListDecorator<V> impleme
 		super(inList);
 	}
 	
+	// ------------------------------------------------------
+	//
+	// Internal list handling
+	//
+	// ------------------------------------------------------
+	
 	/**
-	 * The static builder for the map
-	 **/
-	public static <V> GenericConvertList<V> ensure(List<V> inList) {
-		if (inList instanceof GenericConvertList) { // <V>
-			return (GenericConvertList<V>) inList;
-		}
-		return new ProxyGenericConvertList<V>(inList);
+	 * Getter for the internal underlying map
+	 * @return underlying storage map
+	 */
+	public List<K, V> internalList() {
+		return (List<K, V>) this.collection;
 	}
+	
+	/**
+	 * Setter for the internal underlying map
+	 * @param inList to configure as underlying storage map
+	 */
+	public void internalList(List<K, V> inList) {
+		this.collection = inList;
+	}
+	
+	// ------------------------------------------------------
+	//
+	// String support
+	//
+	// ------------------------------------------------------
 	
 	/**
 	 * Implments a JSON to string conversion
