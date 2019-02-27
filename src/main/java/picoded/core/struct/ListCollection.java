@@ -128,11 +128,11 @@ public interface ListCollection<K, V> {
 	 */
 	default V getListValue(K key, int idx, V fallbck) {
 		List<V> sublist = fetchSubList(key);
-		if( sublist == null ) {
+		if (sublist == null) {
 			return fallbck;
 		}
-
-		if( sublist.size() > idx ) {
+		
+		if (sublist.size() > idx) {
 			return sublist.get(idx);
 		}
 		return fallbck;
@@ -150,7 +150,6 @@ public interface ListCollection<K, V> {
 		return getListValue(key, idx, null);
 	}
 	
-
 	// /**
 	//  * Returns the map object, type casted
 	//  * Following native Map/List standard

@@ -14,10 +14,11 @@ import org.junit.Test;
 
 public class ListCollection_test {
 	
-	public static class TestCollection extends GenericConvertHashMap<String,List<String>> implements ListCollection<String,String> {
+	public static class TestCollection extends GenericConvertHashMap<String, List<String>> implements
+		ListCollection<String, String> {
 		public List<String> fetchSubList(String key) {
 			List<String> ret = get(key);
-			if(ret == null) {
+			if (ret == null) {
 				ret = new ArrayList<String>();
 				put(key, ret);
 			}
@@ -25,7 +26,6 @@ public class ListCollection_test {
 		}
 	}
 	
-
 	private TestCollection arrayListMap = null;
 	
 	@Before

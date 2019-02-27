@@ -99,12 +99,12 @@ public class ConvertJSON {
 		 * Allow single quotes in JSON
 		 **/
 		cm.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-
+		
 		/**
 		 * Ignore transient fields
 		 */
 		cm.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
-
+		
 		/**
 		 * Actual map builder
 		 **/
