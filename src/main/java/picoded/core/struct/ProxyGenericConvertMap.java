@@ -1,13 +1,19 @@
 package picoded.core.struct;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.collections4.map.AbstractMapDecorator;
+import java.util.Set;
 
 import picoded.core.conv.GenericConvert;
 
-public class ProxyGenericConvertMap<K, V> extends AbstractMapDecorator<K, V> implements
-	GenericConvertMap<K, V> {
+/**
+ * Provides a GenericConertMap wrapper around any existing map interface.
+ * 
+ * This is losely based off AbstractMapDecorator.java in apache commons.
+ * With additional support for changing the internalMap directly
+ */
+public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	
 	/**
 	 * The static builder for the map - that helps ensure the output is a GenericConvertMap
@@ -31,7 +37,7 @@ public class ProxyGenericConvertMap<K, V> extends AbstractMapDecorator<K, V> imp
 	 * Constructor
 	 **/
 	public ProxyGenericConvertMap() {
-		super();
+		this.map = new HashMap<>();
 	}
 	
 	/**
@@ -39,9 +45,30 @@ public class ProxyGenericConvertMap<K, V> extends AbstractMapDecorator<K, V> imp
 	 **/
 	@SuppressWarnings("unchecked")
 	public ProxyGenericConvertMap(Map<? extends K, ? extends V> m) {
-		super((Map<K, V>) m);
+		this.map = (Map<K,V>)(Object)m;
 	}
 	
+	// ------------------------------------------------------
+	//
+	// Increase the access scope level of decorated()
+	//
+	// ------------------------------------------------------
+	
+	/**
+	 * Increasing access scope of internal collection
+	 */
+	protected transient Map<K, V> map;
+
+	/**
+	 * Gets the collection being decorated.
+	 * All access to the decorated collection goes via this method.
+	 *
+	 * @return the decorated collection
+	 */
+	protected Map<K, V> decorated() {
+		return map;
+	}
+
 	// ------------------------------------------------------
 	//
 	// Internal map handling
@@ -66,6 +93,91 @@ public class ProxyGenericConvertMap<K, V> extends AbstractMapDecorator<K, V> imp
 	
 	// ------------------------------------------------------
 	//
+	// Required UnsupportedDefaultMap support
+	//
+	// ------------------------------------------------------
+	
+	@Override
+	public V get(final Object key) {
+		return decorated().get(key);
+	}
+
+	@Override
+	public V put(final K key, final V value) {
+		return decorated().put(key, value);
+	}
+
+	@Override
+	public V remove(final Object key) {
+		return decorated().remove(key);
+	}
+
+	@Override
+	public Set<K> keySet() {
+		return decorated().keySet();
+	}
+	
+	// ------------------------------------------------------
+	//
+	// Additional overrides (not required)
+	//
+	// ------------------------------------------------------
+	
+	@Override
+	public void clear() {
+		decorated().clear();
+	}
+
+	@Override
+	public boolean containsKey(final Object key) {
+		return decorated().containsKey(key);
+	}
+
+	@Override
+	public boolean containsValue(final Object value) {
+		return decorated().containsValue(value);
+	}
+
+	@Override
+	public Set<Map.Entry<K, V>> entrySet() {
+		return decorated().entrySet();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return decorated().isEmpty();
+	}
+
+	@Override
+	public void putAll(final Map<? extends K, ? extends V> mapToCopy) {
+		decorated().putAll(mapToCopy);
+	}
+
+	@Override
+	public int size() {
+		return decorated().size();
+	}
+
+	@Override
+	public Collection<V> values() {
+		return decorated().values();
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (object == this) {
+			return true;
+		}
+		return decorated().equals(object);
+	}
+
+	@Override
+	public int hashCode() {
+		return decorated().hashCode();
+	}
+
+	// ------------------------------------------------------
+	//
 	// String support
 	//
 	// ------------------------------------------------------
@@ -75,6 +187,6 @@ public class ProxyGenericConvertMap<K, V> extends AbstractMapDecorator<K, V> imp
 	 **/
 	@Override
 	public String toString() {
-		return GenericConvert.toString(this);
+		return GenericConvert.toString(decorated());
 	}
 }
