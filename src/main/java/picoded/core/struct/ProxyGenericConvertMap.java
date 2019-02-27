@@ -21,9 +21,15 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 * @return  GenericConvertMap equivalent of the given map
 	 **/
 	public static <A, B> GenericConvertMap<A, B> ensure(Map<A, B> inMap) {
+		// Quick null handling
+		if( inMap == null ) {
+			return null;
+		}
+
 		if (inMap instanceof GenericConvertMap) { // <A,B>
 			return (GenericConvertMap<A, B>) inMap;
 		}
+
 		return new ProxyGenericConvertMap<A, B>(inMap);
 	}
 	
@@ -33,6 +39,11 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 * @return  ProxyGenericConvertMap equivalent of the given map
 	 **/
 	public static <T extends ProxyGenericConvertMap, A, B> T ensure(Class<T> classObj, Map<A,B> inMap) {
+		// Quick null handling
+		if( inMap == null ) {
+			return null;
+		}
+
 		// Instance of match
 		if (classObj.isInstance(inMap)) {
 			return (T) inMap;
