@@ -88,20 +88,6 @@ public interface CollectionQueryInterface<V extends Map<String, Object>> {
 	//--------------------------------------------------------------------------
 	
 	/**
-	 * Get a DataObject, and returns it. Skips existance checks if required
-	 * Wrapped in an ProxyGenericConvertMap compatible class
-	 *
-	 * @param  classObj for passing over class type
-	 * @param  object GUID to fetch
-	 * @param  boolean used to indicate if an existance check is done for the request
-	 *
-	 * @return  The ProxyGenericConvertMap[] array
-	 **/
-	default <T extends ProxyGenericConvertMap> T getWrap(Class<T> classObj, String oid) {
-		return ProxyGenericConvertMap.ensure(classObj, get(oid));
-	}
-	
-	/**
 	 * Performs a search query, and returns the respective result, 
 	 * wrapped in an ProxyGenericConvertMap compatible class
 	 *
