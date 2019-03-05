@@ -141,9 +141,9 @@ public interface CollectionQueryInterface<V extends Map<String, Object>> {
 	 **/
 	default <T extends ProxyGenericConvertMap> T queryWrapAny(Class<T> classObj, String whereClause,
 		Object[] whereValues) {
-		V[] resID = query(whereClause, whereValues, null, 0, 1);
-		if (resID.length > 0) {
-			return ProxyGenericConvertMap.ensure(classObj, resID[0]);
+		V resID = queryAny(whereClause, whereValues);
+		if (resID != null) {
+			return ProxyGenericConvertMap.ensure(classObj, resID);
 		}
 		return null;
 	}
