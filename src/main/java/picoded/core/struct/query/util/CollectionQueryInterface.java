@@ -139,7 +139,7 @@ public interface CollectionQueryInterface<V extends Map<String, Object>> {
 	 *
 	 * @return  The DataObject[] array
 	 **/
-	default <T extends ProxyGenericConvertMap> T queryWrapAny(Class<T> classObj, String whereClause,
+	default <T extends ProxyGenericConvertMap> T queryAnyWrap(Class<T> classObj, String whereClause,
 		Object[] whereValues) {
 		V resID = queryAny(whereClause, whereValues);
 		if (resID != null) {
