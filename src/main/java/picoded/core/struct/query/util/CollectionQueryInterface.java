@@ -1,12 +1,13 @@
 package picoded.core.struct.query.utils;
 
+import picoded.core.struct.ProxyGenericConvertMap;
+import picoded.core.struct.query.Aggregation;
+
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import picoded.core.struct.ProxyGenericConvertMap;
-import picoded.core.struct.query.Aggregation;
 
 /**
  * Utility interface, to provide a standardised interface to query
@@ -112,13 +113,13 @@ public interface CollectionQueryInterface<V extends Map<String, Object>> {
 		}
 		
 		// Prepare the return result
-		Object[] ret = new Object[arr.length];
+		T[] ret = (T[]) Array.newInstance(classObj, arr.length);
 		for (int i = 0; i < arr.length; ++i) {
 			ret[i] = ProxyGenericConvertMap.ensure(classObj, arr[i]);
 		}
 		
 		// Return wrapped DataObjects
-		return (T[]) ret;
+		return ret;
 	}
 	
 	/**
