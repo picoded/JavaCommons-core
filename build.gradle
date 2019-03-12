@@ -72,8 +72,12 @@ dependencies {
 	// Servlet API support
 	api 'javax.servlet:javax.servlet-api:4.0.1'
 
+	// https://crunchify.com/java-mailapi-example-send-an-email-via-gmail-smtp/
+	// https://stackoverflow.com/questions/22020533/javamail-api-from-maven/22021656
+	// but the last package 1.4.+ for javax.mail:javax.mail is in 2012 whereas com.sun.mail
+	// is updated 1.6.2 is in 2018
 	// Email broadcaster
-	api 'javax.mail:javax.mail-api:1.6.2'
+	api 'com.sun.mail:javax.mail:1.6.2'
 
 	// This dependencies is used internally, and not exposed to consumers on their own compile classpath.
 	//-------------------------------------------------------------------------------------------------------------------
