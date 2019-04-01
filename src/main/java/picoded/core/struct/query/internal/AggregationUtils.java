@@ -136,6 +136,15 @@ public class AggregationUtils {
 		int len = mapreduceArray.length;
 		BigDecimal[] ret = new BigDecimal[len];
 		
+		// There is no data at all
+		if(dataSet.size() == 0) {
+			// set all of ret to be 0
+			for(int index = 0; index < ret.length; index++){
+				ret[index] = new BigDecimal(0);
+			}
+			return ret;
+		}
+		
 		// 2. Iterate the dataset, and the MapReduceBase
 		for (Object mapDataObj : dataSet) {
 			Map<String, Object> mapData = GenericConvert.toStringMap(mapDataObj);
