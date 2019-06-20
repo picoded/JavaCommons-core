@@ -22,14 +22,14 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 **/
 	public static <A, B> GenericConvertMap<A, B> ensure(Map<A, B> inMap) {
 		// Quick null handling
-		if( inMap == null ) {
+		if (inMap == null) {
 			return null;
 		}
-
+		
 		if (inMap instanceof GenericConvertMap) { // <A,B>
 			return (GenericConvertMap<A, B>) inMap;
 		}
-
+		
 		return new ProxyGenericConvertMap<A, B>(inMap);
 	}
 	
@@ -38,12 +38,13 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 * 
 	 * @return  ProxyGenericConvertMap equivalent of the given map
 	 **/
-	public static <T extends ProxyGenericConvertMap, A, B> T ensure(Class<T> classObj, Map<A,B> inMap) {
+	public static <T extends ProxyGenericConvertMap, A, B> T ensure(Class<T> classObj,
+		Map<A, B> inMap) {
 		// Quick null handling
-		if( inMap == null ) {
+		if (inMap == null) {
 			return null;
 		}
-
+		
 		// Instance of match
 		if (classObj.isInstance(inMap)) {
 			return (T) inMap;
@@ -59,6 +60,30 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	/**
+	 * The static builder for the map - that helps ensure the output is a ProxyGenericConvertMap
+	 * 
+	 * @return  ProxyGenericConvertMap equivalent of the given map as an array array
+	 **/
+	public static <T extends ProxyGenericConvertMap, A, B> T[] ensureArray(Class<T> classObj,
+		Map<A, B>[] mapArray) {
+		// Quick null handling
+		if (mapArray == null) {
+			return null;
+		}
+		
+		// Prepare the return result
+		T[] ret = (T[]) Array.newInstance(classObj, arr.length);
+		
+		// Iterate each object
+		for (int i = 0; i < mapArray.length; ++i) {
+			ret[i] = ProxyGenericConvertMap.ensure(classObj, mapArray[i]);
+		}
+		
+		// Return formatted array
+		return ret;
 	}
 	
 	// ------------------------------------------------------
