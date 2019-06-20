@@ -87,6 +87,30 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 		return ret;
 	}
 	
+	/**
+	 * The static builder for the map - that helps ensure the output is a ProxyGenericConvertMap
+	 * 
+	 * @return  ProxyGenericConvertMap equivalent of the given map as an array array
+	 **/
+	public static <T extends ProxyGenericConvertMap, A, B> T[] ensureList(Class<T> classObj,
+		List<Map<A, B>> mapList) {
+		// Quick null handling
+		if (mapList == null) {
+			return null;
+		}
+		
+		// Prepare the return result
+		List<T> ret = new ArrayList<T>();
+		
+		// Iterate each object
+		for (int i = 0; i < mapList.size(); ++i) {
+			mapList.add(ProxyGenericConvertMap.ensure(classObj, mapList.get(i)));
+		}
+		
+		// Return formatted array
+		return ret;
+	}
+	
 	// ------------------------------------------------------
 	//
 	// Constructors
