@@ -1,10 +1,12 @@
 package picoded.core.struct;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.lang.reflect.Array;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
 
 import picoded.core.conv.GenericConvert;
 
@@ -92,7 +94,7 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 * 
 	 * @return  ProxyGenericConvertMap equivalent of the given map as an array array
 	 **/
-	public static <T extends ProxyGenericConvertMap, A, B> T[] ensureList(Class<T> classObj,
+	public static <T extends ProxyGenericConvertMap, A, B> List<T> ensureList(Class<T> classObj,
 		List<Map<A, B>> mapList) {
 		// Quick null handling
 		if (mapList == null) {
@@ -101,10 +103,9 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 		
 		// Prepare the return result
 		List<T> ret = new ArrayList<T>();
-		
 		// Iterate each object
 		for (int i = 0; i < mapList.size(); ++i) {
-			mapList.add(ProxyGenericConvertMap.ensure(classObj, mapList.get(i)));
+			ret.add(ProxyGenericConvertMap.ensure(classObj, mapList.get(i)));
 		}
 		
 		// Return formatted array
