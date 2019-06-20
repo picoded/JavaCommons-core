@@ -2,6 +2,7 @@ package picoded.core.struct;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Array;
 import java.util.Map;
 import java.util.Set;
 
@@ -75,7 +76,7 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 		}
 		
 		// Prepare the return result
-		T[] ret = (T[]) Array.newInstance(classObj, arr.length);
+		T[] ret = (T[]) Array.newInstance(classObj, mapArray.length);
 		
 		// Iterate each object
 		for (int i = 0; i < mapArray.length; ++i) {
