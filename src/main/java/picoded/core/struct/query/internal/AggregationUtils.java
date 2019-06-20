@@ -137,9 +137,9 @@ public class AggregationUtils {
 		BigDecimal[] ret = new BigDecimal[len];
 		
 		// There is no data at all
-		if(dataSet.size() == 0) {
+		if (dataSet.size() == 0) {
 			// set all of ret to be 0
-			for(int index = 0; index < ret.length; index++){
+			for (int index = 0; index < ret.length; index++) {
 				ret[index] = new BigDecimal(0);
 			}
 			return ret;

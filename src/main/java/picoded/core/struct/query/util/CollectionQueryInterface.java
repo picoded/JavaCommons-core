@@ -107,19 +107,8 @@ public interface CollectionQueryInterface<V extends Map<String, Object>> {
 		// Does the original query
 		V[] arr = query(whereClause, whereValues, orderByStr, offset, limit);
 		
-		// Quick null response handling
-		if (arr == null) {
-			return null;
-		}
-		
-		// Prepare the return result
-		T[] ret = (T[]) Array.newInstance(classObj, arr.length);
-		for (int i = 0; i < arr.length; ++i) {
-			ret[i] = ProxyGenericConvertMap.ensure(classObj, arr[i]);
-		}
-		
-		// Return wrapped DataObjects
-		return ret;
+		// Returns it wrapped
+		return ProxyGenericConvertMap.ensureArray(classObj, arr);
 	}
 	
 	/**
@@ -188,7 +177,8 @@ public interface CollectionQueryInterface<V extends Map<String, Object>> {
 	 *
 	 * @return  The DataObject[] array
 	 **/
-	default List<V> queryList(String whereClause, Object[] whereValues, String orderByStr, int offset, int limit) {
+	default List<V> queryList(String whereClause, Object[] whereValues, String orderByStr,
+		int offset, int limit) {
 		return Arrays.asList(query(whereClause, whereValues, orderByStr, offset, limit));
 	}
 	
