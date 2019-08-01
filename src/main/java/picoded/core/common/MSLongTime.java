@@ -5,7 +5,7 @@ package picoded.core.common;
  * With commonly confused units intentionally not represented,
  * forcing users to use "AVG_MONTH" or "AVG_YEAR" instead
  **/
-public static class MSLongTime {
+public class MSLongTime {
 	
 	// Common second to week time units
 	public static final long SECOND = 1000;
@@ -24,7 +24,7 @@ public static class MSLongTime {
 	
 	// Taking the average of a month to be 30.4375 days
 	// which take into account leap years 
-	public static final long AVG_MONTH = 30.4375 * DAY;
+	public static final long AVG_MONTH = DAY * 304375 / 10000;
 	
 	// Average year, taking into account leap years
 	public static final long AVG_YEAR = 12 * AVG_MONTH;
