@@ -41,8 +41,7 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 * 
 	 * @return  ProxyGenericConvertMap equivalent of the given map
 	 **/
-	public static <T extends ProxyGenericConvertMap> T ensure(Class<T> classObj,
-		Object inMap) {
+	public static <T extends ProxyGenericConvertMap> T ensure(Class<T> classObj, Object inMap) {
 		// Quick null handling
 		if (inMap == null) {
 			return null;
@@ -51,7 +50,7 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 		// Instance of match
 		if (classObj.isInstance(inMap)) {
 			return (T) inMap;
-		} else if( !(inMap instanceof Map) ) {
+		} else if (!(inMap instanceof Map)) {
 			// Validating the inMap is a map
 			throw new RuntimeException("Unexpected object type (not a map)");
 		}
@@ -59,7 +58,7 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 		// Remapping
 		try {
 			T ret = classObj.newInstance();
-			ret.internalMap( (Map) inMap);
+			ret.internalMap((Map) inMap);
 			return ret;
 		} catch (InstantiationException e) {
 			throw new RuntimeException(e);
@@ -75,8 +74,8 @@ public class ProxyGenericConvertMap<K, V> implements GenericConvertMap<K, V> {
 	 * 
 	 * @return  ProxyGenericConvertMap equivalent of the given map as an array array
 	 **/
-	public static <T extends ProxyGenericConvertMap, M extends Object> T[] ensureArray(Class<T> classObj,
-		M[] mapArray) {
+	public static <T extends ProxyGenericConvertMap, M extends Object> T[] ensureArray(
+		Class<T> classObj, M[] mapArray) {
 		// Quick null handling
 		if (mapArray == null) {
 			return null;

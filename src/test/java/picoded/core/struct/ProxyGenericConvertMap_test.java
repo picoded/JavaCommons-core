@@ -52,30 +52,30 @@ public class ProxyGenericConvertMap_test {
 		proxyGenericConvertMap = new ProxyGenericConvertMap<>(map);
 		assertNotNull(proxyGenericConvertMap.toString());
 	}
-
+	
 	//
 	// Extended class "ensure" test
 	//
-
+	
 	public static class PClass extends ProxyGenericConvertMap<String, String> {
 		public PClass() {
 			super();
 		}
 	}
-
+	
 	@Test
 	public void ensureArrayConversion() {
 		// Map to add
 		Map<String, String> map = new HashMap<>();
 		map.put("hello", "world");
 		// List with map
-		List<Map<String,String>> list = new ArrayList<>();
+		List<Map<String, String>> list = new ArrayList<>();
 		list.add(map);
-
+		
 		// Ensure conversion to PClass
 		PClass[] rArr = null;
 		assertNotNull(rArr = ProxyGenericConvertMap.ensureArray(PClass.class, list.toArray()));
-
+		
 		// Validate the result
 		assertEquals("world", rArr[0].get("hello"));
 	}
@@ -86,9 +86,9 @@ public class ProxyGenericConvertMap_test {
 		Map<String, String> map = new HashMap<>();
 		map.put("hello", "world");
 		// List with map
-		List<Map<String,String>> list = new ArrayList<>();
+		List<Map<String, String>> list = new ArrayList<>();
 		list.add(map);
-
+		
 		// Ensure conversion to PClass
 		List<PClass> rList = null;
 		assertNotNull(rList = ProxyGenericConvertMap.ensureList(PClass.class, list.toArray()));
