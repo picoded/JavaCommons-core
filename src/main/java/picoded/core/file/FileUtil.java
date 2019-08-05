@@ -509,6 +509,33 @@ public class FileUtil extends FileUtilBase {
 		return org.apache.commons.io.FilenameUtils.normalize(filename);
 	}
 	
+	/**
+	 * @see https://commons.apache.org/proper/commons-io/javadocs/api-2.5/org/apache/commons/io/FilenameUtils.html#normalize(java.lang.String)
+	 * @param raw file name/path
+	 * @param linux seperator if true, windows seperator if false
+	 * @return full resolved path with ending / for directories
+	 **/
+	public static String normalize(String filename, boolean linuxSeperator) {
+		return org.apache.commons.io.FilenameUtils.normalize(filename, linuxSeperator);
+	}
+	
+	/**
+	 * Attempts to get parent path of the given filepath
+	 * @param raw file name/path
+	 * @return parent pathing if possible, else returns null;
+	 */
+	public static String getParentPath(String filepath) {
+		String normalized = normalize(filepath);
+		
+		// Limit is reached (cant get a parent again)
+		if (normalized.equals("/") || normalized.equals(".") || normalized.length() == 0) {
+			return null;
+		}
+		
+		// Get and return the parent path
+		return normalize(normalized + "/../");
+	}
+	
 	//------------------------------------------------------------------------------------------------------------------
 	//
 	// Parent child relationship handling

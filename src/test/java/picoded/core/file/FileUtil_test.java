@@ -445,4 +445,20 @@ public class FileUtil_test {
 		FileUtil.setFilePermission(new File("./test/Conv/" + "chaosmonkey.js"), 0, 0, 0, false);
 	}
 	
+	//------------------------------------------------------------------------------------------------------------------
+	//
+	// File path normalizing test
+	//
+	//------------------------------------------------------------------------------------------------------------------
+	
+	@Test 
+	public void parentPathing() {
+		assertEquals("", FileUtil.getParentPath("hello"));
+		assertEquals("", FileUtil.getParentPath("./hello"));
+		assertEquals("/", FileUtil.getParentPath("/hello"));
+
+		assertEquals("hello/", FileUtil.getParentPath("hello/world"));
+		assertEquals("hello/", FileUtil.getParentPath("./hello/world"));
+		assertEquals("/hello/", FileUtil.getParentPath("/hello/world"));
+	}
 }
