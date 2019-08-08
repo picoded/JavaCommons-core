@@ -218,14 +218,31 @@ test {
 
 //----------------------------------------------------------------
 //
-//  Custom src-beautify
+//  Custom src-beautify / prettifier
 //
 //----------------------------------------------------------------
 
+// srcBeautify, with input file mapping (to skip srcBeautify steps if needed)
+def srcBeautify_inputFiles = project.fileTree(dir: "src", include: "**/*.java")
+def srcBeautify_outputDir = "${project.buildDir}/build-util/java-fromatter/output/"
 task srcBeautify(type:Exec) {
+	// Input file tracking, to skip command if its not needed
+	inputs.files(srcBeautify_inputFiles)
+	outputs.dir(srcBeautify_outputDir)
+
+	// The build formatter command
 	workingDir '.'
-	commandLine 'java','-cp','./build-util/java-formatter/java-formatter-with-dependencies.jar','Formatter','./build-util/java-formatter/code-format.opts','./src'
+	commandLine './build-util/java-formatter/parallel_format.sh','./src'
 }
+task prettify(dependsOn: srcBeautify) 
+
+// Doing compile alias for java
+task src(dependsOn: compileJava) 
+task source(dependsOn: src) 
+task compile(dependsOn: src) 
+
+// Forcing srcBeautify on src step
+src.dependsOn srcBeautify
 
 //----------------------------------------------------------------
 //
