@@ -451,12 +451,12 @@ public class FileUtil_test {
 	//
 	//------------------------------------------------------------------------------------------------------------------
 	
-	@Test 
+	@Test
 	public void parentPathing() {
 		assertEquals("", FileUtil.getParentPath("hello"));
 		assertEquals("", FileUtil.getParentPath("./hello"));
 		assertEquals("/", FileUtil.getParentPath("/hello"));
-
+		
 		assertEquals("hello/", FileUtil.getParentPath("hello/world"));
 		assertEquals("hello/", FileUtil.getParentPath("./hello/world"));
 		assertEquals("/hello/", FileUtil.getParentPath("/hello/world"));
