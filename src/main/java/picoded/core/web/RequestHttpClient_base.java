@@ -262,12 +262,21 @@ class RequestHttpClient_base {
 		return reqBuilder;
 	}
 	
+	/**
+	 * Setup the basic authorization header (if present in URL)
+	 * 
+	 * @param reqBuilder
+	 * @param reqUrl
+	 * @return
+	 */
 	protected static Request.Builder setUpBasicAuthorization(Request.Builder reqBuilder,
 		String reqUrl) {
+		// Get existing user/pass string location
 		String filterURL = reqUrl.replaceAll("https://", "").replaceAll("http://", "");
 		int firstColon = filterURL.indexOf(":");
 		int lastAdd = filterURL.lastIndexOf("@");
 		
+		// No user/pass found - return as it is
 		if (firstColon == -1 || lastAdd == -1) {
 			return reqBuilder;
 		}
@@ -280,6 +289,30 @@ class RequestHttpClient_base {
 		String authStringEnc = "Basic " + new String(authString64);
 		
 		return reqBuilder.addHeader("Authorization", authStringEnc);
+	}
+	
+	/**
+	 * Remove auth information from the request URL (if present in URL)
+	 * 
+	 * @param reqUrl
+	 * @return
+	 */
+	protected static String removeAuthFromURL(String reqUrl) {
+		// Get existing user/pass string location
+		String filterURL = reqUrl.replaceAll("https://", "").replaceAll("http://", "");
+		int firstColon = filterURL.indexOf(":");
+		int lastAdd = filterURL.lastIndexOf("@");
+		
+		// No user/pass found - return as it is
+		if (firstColon == -1 || lastAdd == -1) {
+			return reqUrl;
+		}
+		
+		// Get the user/pass block
+		String userPassBlock = filterURL.substring(0, lastAdd + 1);
+		
+		// Replace user/pass in URL
+		return reqUrl.replace(userPassBlock, "");
 	}
 	
 	//------------------------------------------------
@@ -343,7 +376,7 @@ class RequestHttpClient_base {
 		reqUrl = appendGetParameters(reqUrl, paramMap);
 		
 		// Build the request
-		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
+		Request.Builder reqBuilder = new Request.Builder().url(removeAuthFromURL(reqUrl));
 		reqBuilder = setupRequestHeaders(reqUrl, reqBuilder, cookiesMap, headersMap);
 		return executeRequestBuilder(reqBuilder);
 	}
@@ -599,7 +632,7 @@ class RequestHttpClient_base {
 		Map<String, String[]> headersMap //
 	) {
 		// Initialize the request builder with url and set up its headers
-		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
+		Request.Builder reqBuilder = new Request.Builder().url(removeAuthFromURL(reqUrl));
 		reqBuilder = setupRequestHeaders(reqUrl, reqBuilder, cookiesMap, headersMap);
 		
 		// This is to ensure that the reqBuilder is able to build the
@@ -636,7 +669,7 @@ class RequestHttpClient_base {
 		Map<String, String[]> headersMap //
 	) {
 		// Initialize the request builder with url and set up its headers
-		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
+		Request.Builder reqBuilder = new Request.Builder().url(removeAuthFromURL(reqUrl));
 		reqBuilder = setupRequestHeaders(reqUrl, reqBuilder, cookiesMap, headersMap);
 		
 		// Normalize json object to jsonString
@@ -676,7 +709,7 @@ class RequestHttpClient_base {
 		Map<String, String[]> headersMap //
 	) {
 		// Initialize the request builder with url and set up its headers
-		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
+		Request.Builder reqBuilder = new Request.Builder().url(removeAuthFromURL(reqUrl));
 		reqBuilder = setupRequestHeaders(reqUrl, reqBuilder, cookiesMap, headersMap);
 		
 		if ((paramsMap != null && paramsMap.size() > 0) || (filesMap != null && filesMap.size() > 0)) {
