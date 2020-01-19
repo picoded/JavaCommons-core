@@ -203,10 +203,10 @@ test {
 		maxParallelForks = project.maxParallelForks as int;
 	} else {
 		// Lets optimize the test to run in parllel threads by default
-		// taking the system process count - 1 (so as to not lag hang the OS)
-		maxParallelForks = (Runtime.runtime.availableProcessors() - 1) as int;
-		if(maxParallelForks < 1) {
+		if( (Runtime.runtime.availableProcessors()) <= 1 ) {
 			maxParallelForks = 1;
+		} else {
+			maxParallelForks = (Runtime.runtime.availableProcessors() - 1) as int;
 		}
 	}
 	
