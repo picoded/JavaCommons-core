@@ -13,9 +13,6 @@ import javax.mail.Message.RecipientType;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
-import javax.mail.Store;
-import javax.mail.Folder;
-import javax.mail.Flags.Flag;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -24,7 +21,6 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 
 import picoded.core.struct.GenericConvertMap;
-import picoded.core.struct.GenericConvertHashMap;
 import picoded.core.struct.ProxyGenericConvertMap;
 
 /**
@@ -35,16 +31,17 @@ import picoded.core.struct.ProxyGenericConvertMap;
 public class EmailBroadcaster {
 	
 	private Session session;
-	private String fromEmail;
+	private String fromAddress; // Sender's email address
+	private String fromName; // Senders' name
 	private String adminEmail;
 	
 	/**
 	 * Email constructor, used to setup the SMTP connection
 	 *
-	 * @param  SMTP Url address (with port)
-	 * @param  Username for sender account
-	 * @param  Password for sender account
-	 * @param  Sending email address
+	 * @param  smtpUrl      Url address (with port)
+	 * @param  username     for sender account
+	 * @param  password     for sender account
+	 * @param  fromAddress  email address
 	 **/
 	public EmailBroadcaster(final String smtpUrl, final String username, final String password,
 		final String fromAddress) {
@@ -53,7 +50,7 @@ public class EmailBroadcaster {
 	
 	public EmailBroadcaster(final String smtpUrl, final String username, final String password,
 		final String fromAddress, boolean isSSL) {
-		this(smtpUrl, username, password, fromAddress, isSSL, false);
+		this(smtpUrl, username, password, fromAddress, null, isSSL, false);
 	}
 	
 	/**
@@ -65,10 +62,21 @@ public class EmailBroadcaster {
 	 * @param  Sending email address
 	 * @param  Use SSL over SMTP
 	 **/
+	/**
+	 * Create instance of EmailBroadcaster, use to setup SMTP over SSL connection
+	 * @param smtpUrl           SMTP Url address (with port)
+	 * @param username          Sender account's username
+	 * @param password          Sender account's password
+	 * @param fromAddress       Sender's email address
+	 * @param fromName          Sender's name
+	 * @param isSSL             Use SSL flag
+	 * @param enableSTARTTLS    Enable STARTTLS flag
+	 */
 	public EmailBroadcaster(final String smtpUrl, final String username, final String password,
-		final String fromAddress, boolean isSSL, boolean enableSTARTTLS) {
+		final String fromAddress, final String fromName, boolean isSSL, boolean enableSTARTTLS) {
 		
-		fromEmail = fromAddress;
+		this.fromAddress = fromAddress;
+		this.fromName = fromName;
 		Properties props = new Properties();
 		
 		String[] parts = smtpUrl.split(":");
@@ -90,7 +98,7 @@ public class EmailBroadcaster {
 		
 		if (username != null && username.trim().length() > 0) {
 			props.put("mail.smtp.auth", "true");
-			session = Session.getInstance(props, new javax.mail.Authenticator() {
+			this.session = Session.getInstance(props, new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
 					return new PasswordAuthentication(username, password);
 				}
@@ -99,7 +107,7 @@ public class EmailBroadcaster {
 			props.put("mail.smtp.auth", "false");
 			props.put("mail.smtp.auth.login.disable", "true");
 			
-			session = Session.getInstance(props, null);
+			this.session = Session.getInstance(props, null);
 		}
 		
 		// System.out.println("Finished setting up emailbroadcaster object");
@@ -115,8 +123,9 @@ public class EmailBroadcaster {
 			return;
 		}
 		
-		fromEmail = smtpConfigMap.getString("emailFrom", "");
-		
+		fromAddress = smtpConfigMap.getString("emailFrom", "");
+		fromName = smtpConfigMap.getString("emailFromName", "");
+
 		String smtpUrl = smtpConfigMap.getString("host", "");
 		String[] parts = smtpUrl.split(":");
 		
@@ -162,17 +171,19 @@ public class EmailBroadcaster {
 	/**
 	 * Full featured sendEmail function, all other "overloaded" functions are convinence functiosn based on this
 	 *
-	 * @param  email subject
-	 * @param  email HTML content
-	 * @param  sending to email addresses array
-	 * @param  CC to email addresses array
-	 * @param  BCC to email adresses array
-	 * @param  File attachment Map<String filename, String absolute file path>
-	 * @param  Overwrite default, "from address"
+	 * @param  subject              Email subject
+	 * @param  htmlContent          HTML Email content
+	 * @param  toAddresses          TO email address list
+	 * @param  ccAddresses          CC email addresses list
+	 * @param  bccAddresses         BCC email adresses list
+	 * @param  fileAttachments      File attachments Map<String filename, String absolute file path>
+	 * @param  fromAddress          override default sender's address
+	 * @param  fromName             override default sender's name
+	 * @param  inextraSendOptions   extra options
 	 **/
 	public boolean sendEmail(String subject, String htmlContent, String toAddresses[],
 		String ccAddresses[], String bccAddresses[], Map<String, String> fileAttachments,
-		String fromAddress, Map<String, Object> inextraSendOptions) throws Exception {
+		String fromAddress, String fromName, Map<String, Object> inextraSendOptions) throws Exception {
 		// Actual message contianer used by the function
 		MimeMessage message = new MimeMessage(session);
 		
@@ -183,12 +194,16 @@ public class EmailBroadcaster {
 			.ensure(inextraSendOptions);
 		
 		// Process "FROM" address field
-		if (fromAddress != null) {
-			message.setFrom(new InternetAddress(fromAddress));
+		String senderEmail = fromAddress != null ? fromAddress : this.fromAddress;
+		String senderName = fromName != null ? fromName : this.fromName;
+		InternetAddress sender;
+		if(fromName == null){
+			sender = new InternetAddress(this.fromAddress);
 		} else {
-			message.setFrom(new InternetAddress(fromEmail));
+			sender = new InternetAddress(this.fromAddress, fromName);
 		}
-		
+		message.setFrom(sender);
+
 		// Process "TO" address field
 		if (toAddresses == null || toAddresses.length <= 0) {
 			throw new Exception("Sending to email address is not allowed to be 'empty'");
@@ -273,7 +288,16 @@ public class EmailBroadcaster {
 		
 		return true;
 	}
-	
+
+	/**
+	 * Shorten convinence function (does not need testing, test the core function directly instead)
+	 **/
+	public boolean sendEmail(String subject, String htmlContent, String toAddresses[],
+	                         String ccAddresses[], String bccAddresses[], Map<String, String> fileAttachments,
+	                         String fromAddress, Map<String, Object> inextraSendOptions) throws Exception{
+		return sendEmail(subject, htmlContent, toAddresses, ccAddresses, bccAddresses, fileAttachments, fromAddress, null, inextraSendOptions);
+	}
+
 	/**
 	 * Shorten convinence function (does not need testing, test the core function directly instead)
 	 **/
@@ -334,10 +358,10 @@ public class EmailBroadcaster {
 	}
 	
 	public void setAdminEmail(String email) {
-		adminEmail = email;
+		this.adminEmail = email;
 	}
 	
 	public String getAdminEmail() {
-		return adminEmail;
+		return this.adminEmail;
 	}
 }
