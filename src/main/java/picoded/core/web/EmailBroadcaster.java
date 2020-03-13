@@ -194,13 +194,13 @@ public class EmailBroadcaster {
 			.ensure(inextraSendOptions);
 		
 		// Process "FROM" address field
-		String senderEmail = fromAddress != null ? fromAddress : this.fromAddress;
-		String senderName = fromName != null ? fromName : this.fromName;
+		String senderEmail = (fromAddress != null && !fromAddress.isEmpty()) ? fromAddress : this.fromAddress;
+		String senderName = (fromName != null && !fromName.isEmpty()) ? fromName : this.fromName;
 		InternetAddress sender;
-		if(fromName == null){
-			sender = new InternetAddress(this.fromAddress);
+		if(senderName == null || senderName.isEmpty()){
+			sender = new InternetAddress(senderEmail);
 		} else {
-			sender = new InternetAddress(this.fromAddress, fromName);
+			sender = new InternetAddress(senderEmail, senderName);
 		}
 		message.setFrom(sender);
 
