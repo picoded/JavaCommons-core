@@ -418,8 +418,23 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 			return toObjectArray(fallbck, null);
 		}
 		
-		if (input instanceof Object[]) {
+		if (input instanceof Object[] ) {
 			return (Object[]) input;
+		}
+		if( input.getClass().isArray() ) {
+			try {
+				return (Object[]) input;
+			} catch(ClassCastException e) {
+
+				// Attempts to convert from known common primitive array
+				Object[] ret = ArrayConv.toObject( (Object)input );
+				if( ret != null ) {
+					return ret;
+				}
+
+				// Fallback to inefficient method ? (what case will this be)?
+				// return ConvertJSON.toObjectArray( ConvertJSON.fromObject(input) );
+			}
 		}
 		
 		/**

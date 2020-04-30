@@ -465,4 +465,14 @@ public class GenericConvert_test {
 		assertEquals(defMap, toGenericConvertStringMap(ConvertJSON.fromMap(defMap), "default"));
 	}
 	
+	@Test
+	public void intArrayHandling() {
+		int[] data = new int[]{1,2,3};
+		Object[] res = toObjectArray( data );
+		assertNotNull( res );
+		assertEquals( 3, res.length );
+		assertEquals( 1, res[0] );
+		assertEquals( 2, res[1] );
+		assertEquals( 3, res[2] );
+	}
 }
