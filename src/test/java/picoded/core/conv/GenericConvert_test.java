@@ -467,7 +467,8 @@ public class GenericConvert_test {
 	
 	@Test
 	public void intArrayHandling() {
-		Object[] res = toObjectArray("[1,2,3]");
+		int[] data = new int[]{1,2,3};
+		Object[] res = toObjectArray( data );
 		assertNotNull( res );
 		assertEquals( 3, res.length );
 		assertEquals( 1, res[0] );
