@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class Equals_test {
 	public void testValuesTest() {
 		Map<String, Object> defaultArgMap = new HashMap<String, Object>();
 		equals = new Equals("key", "myKey", defaultArgMap);
-		assertFalse(equals.testValues(null, null));
+		assertTrue(equals.testValues(null, null));
 	}
 	
 }
