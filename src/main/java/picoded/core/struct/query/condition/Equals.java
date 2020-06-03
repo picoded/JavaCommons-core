@@ -40,9 +40,9 @@ public class Equals extends ConditionBase {
 	 **/
 	@Override
 	protected boolean testValues(Object fieldValue, Object argValue) {
-		if (argValue == null || fieldValue == null) {
-			return false;
-		} //else {
+		// if (argValue == null || fieldValue == null) {
+		// 	return false;
+		// } //else {
 		return CompareUtils.dynamicCompare(fieldValue, argValue) == 0;
 		//}
 	}
