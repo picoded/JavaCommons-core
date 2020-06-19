@@ -105,7 +105,6 @@ public class CompareUtils {
 	}
 	
 	/**
-	 *
 	 * Attempts numeric comparision first, else fallsback to string comparision
 	 *
 	 * @param o1 - the first object to be compared.
@@ -114,6 +113,11 @@ public class CompareUtils {
 	 * @return -1, 0, or 1 as the first argument is less than, equal to, or greater than the second
 	 **/
 	public static int dynamicCompare(Object o1, Object o2) {
+		// Quick direct equality
+		// also works if both values is null
+		if( o1 == o2 ) {
+			return 0;
+		}
 		
 		// String type comparision
 		if ( //
