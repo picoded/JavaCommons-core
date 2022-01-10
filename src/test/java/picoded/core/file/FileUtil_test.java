@@ -47,8 +47,16 @@ public class FileUtil_test {
 	
 	@BeforeClass
 	public static void baseSetup() throws IOException {
-		if (baseOutputDir.exists()) {
-			FileUtil.deleteDirectory(baseOutputDir); // Delete and clear directory (if it exists)
+		// This operation is unstable, so we try, and retry
+		try {
+			if (baseOutputDir.exists()) {
+				FileUtil.deleteDirectory(baseOutputDir); // Delete and clear directory (if it exists)
+			}
+		} catch(Exception e) {
+			// The retry - if this fails, the error goes out		
+			if (baseOutputDir.exists()) {
+				FileUtil.deleteDirectory(baseOutputDir); // Delete and clear directory (if it exists)
+			}
 		}
 		baseOutputDir.mkdirs();
 	}
