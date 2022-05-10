@@ -174,6 +174,7 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 			try {
 				if ( //
 				fileExtension.equalsIgnoreCase("json") || //
+				fileExtension.equalsIgnoreCase("jsonc") || //
 					fileExtension.equalsIgnoreCase("js") //
 				) {
 					//
@@ -182,7 +183,7 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 					String jsString = FileUtil.readFileToString(inFile);
 					Object jsonObj = ConvertJSON.toObject(jsString);
 					if (jsonObj == null) {
-						throw new RuntimeException("Failed ot pass JSON config : " + inFile.getPath());
+						throw new RuntimeException("Failed to pass JSON config : " + inFile.getPath());
 					}
 					map.put(filePrefix, jsonObj);
 				} else if ( //
