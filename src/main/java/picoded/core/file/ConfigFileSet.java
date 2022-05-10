@@ -25,7 +25,7 @@ import picoded.core.conv.NestedObjectFetch;
  * Note that get/fetch result is meant to be mainly "read only",
  * any modification may result into unexpected behaviour.
  * 
- * Note that internally this uses a ConcurrentHashMap for folders.
+ * Note that internally this uses a ConcurrentHashMap for "folders".
  * As such one could initialize this once on context start of a server,
  * and read it safely across multiple threads.
  **/
@@ -47,6 +47,15 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 	 * Blank constructor
 	 **/
 	public ConfigFileSet() {
+	}
+	
+	/**
+	 * Map based constructor, this is used mainly for testing purposes.
+	 * 
+	 * @param  configObj to use for the setup
+	 **/
+	public ConfigFileSet(Map<String,Object> configObj) {
+		configMap.putAll(configObj);
 	}
 	
 	/**
