@@ -21,7 +21,7 @@ public class ArrayConv extends ArrayUtils {
 	protected ArrayConv() {
 		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
 	}
-
+	
 	/**
 	 * Utility function to clone an object as a primitive array if possible, else return null.
 	 * This is useful in particular when the actual array type is not known at compile time.
@@ -33,54 +33,54 @@ public class ArrayConv extends ArrayUtils {
 	 * @return  cloned primitive array, else null
 	 */
 	static public Object clonePrimitiveArray(Object in) {
-
+		
 		// Null clones to null
 		if (in == null) {
 			return null;
 		}
-
+		
 		// Array cloning
 		if (in.getClass().isArray()) {
 			// Is int array
 			if (in instanceof int[]) {
 				return ArrayConv.clone((int[]) in);
 			}
-
+			
 			// is long array
 			if (in instanceof long[]) {
 				return ArrayConv.clone((long[]) in);
 			}
-
+			
 			// is short array
 			if (in instanceof short[]) {
 				return ArrayConv.clone((short[]) in);
 			}
-
+			
 			// is float array
 			if (in instanceof float[]) {
 				return ArrayConv.clone((float[]) in);
 			}
-
+			
 			// is double array
 			if (in instanceof double[]) {
 				return ArrayConv.clone((double[]) in);
 			}
-
+			
 			// Is byte array
 			if (in instanceof byte[]) {
 				return ArrayConv.clone((byte[]) in);
 			}
-
+			
 			// Is char array
 			if (in instanceof char[]) {
 				return ArrayConv.clone((char[]) in);
 			}
 		}
-
+		
 		// All failed, null
 		return null;
 	}
-
+	
 	/**
 	 * Utility function to typecast a primitive array into an object type
 	 * This is useful in particular when the actual array type is not known at compile time.
@@ -92,54 +92,54 @@ public class ArrayConv extends ArrayUtils {
 	 * @return  cloned primitive array, else null
 	 */
 	static public Object[] toObject(Object in) {
-
+		
 		// Null clones to null
 		if (in == null) {
 			return null;
 		}
-
+		
 		// Array cloning
 		if (in.getClass().isArray()) {
 			// Is int array
 			if (in instanceof int[]) {
 				return ArrayConv.toObject((int[]) in);
 			}
-
+			
 			// is long array
 			if (in instanceof long[]) {
 				return ArrayConv.toObject((long[]) in);
 			}
-
+			
 			// is short array
 			if (in instanceof short[]) {
 				return ArrayConv.toObject((short[]) in);
 			}
-
+			
 			// is float array
 			if (in instanceof float[]) {
 				return ArrayConv.toObject((float[]) in);
 			}
-
+			
 			// is double array
 			if (in instanceof double[]) {
 				return ArrayConv.toObject((double[]) in);
 			}
-
+			
 			// Is byte array
 			if (in instanceof byte[]) {
 				return ArrayConv.toObject((byte[]) in);
 			}
-
+			
 			// Is char array
 			if (in instanceof char[]) {
 				return ArrayConv.toObject((char[]) in);
 			}
 		}
-
+		
 		// All failed, null
 		return null;
 	}
-
+	
 	/**
 	 * This is a helper method to check strings inside array, ignoring
 	 * case sensitivity. It supports string values only.

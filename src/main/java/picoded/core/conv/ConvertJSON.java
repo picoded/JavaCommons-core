@@ -320,17 +320,18 @@ public class ConvertJSON {
 	public static Object toCustomClass(String input, Class<?> c) {
 		try {
 			// Throw on blank string, as that cannot be casted to any class
-			if( input == null || input.length() == 0 ) {
-				throw new IOException("Unexpected blank JSON string - unable to cast to the required class type");
+			if (input == null || input.length() == 0) {
+				throw new IOException(
+					"Unexpected blank JSON string - unable to cast to the required class type");
 			}
-
+			
 			// This uses the `com.fasterxml.jackson.core` library
 			// return cachedMapper().readValue(input, c);
-
+			
 			// This uses the `org.hjson` library to filter the hjson string first
 			String jsonString = org.hjson.JsonValue.readHjson(input).toString();
 			return cachedMapper().readValue(jsonString, c);
-
+			
 			// @TODO - consider doing the much more optimized route of 
 			//         reading this as a JsonObject, and doing the required 
 			//         type check and casting, before falling back to jsonString

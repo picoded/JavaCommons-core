@@ -52,7 +52,7 @@ public class FileUtil_test {
 			if (baseOutputDir.exists()) {
 				FileUtil.deleteDirectory(baseOutputDir); // Delete and clear directory (if it exists)
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			// The retry - if this fails, the error goes out		
 			if (baseOutputDir.exists()) {
 				FileUtil.deleteDirectory(baseOutputDir); // Delete and clear directory (if it exists)

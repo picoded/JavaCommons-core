@@ -54,7 +54,7 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 	 * 
 	 * @param  configObj to use for the setup
 	 **/
-	public ConfigFileSet(Map<String,Object> configObj) {
+	public ConfigFileSet(Map<String, Object> configObj) {
 		configMap.putAll(configObj);
 	}
 	
@@ -174,7 +174,7 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 			try {
 				if ( //
 				fileExtension.equalsIgnoreCase("json") || //
-				fileExtension.equalsIgnoreCase("jsonc") || //
+					fileExtension.equalsIgnoreCase("jsonc") || //
 					fileExtension.equalsIgnoreCase("js") //
 				) {
 					//

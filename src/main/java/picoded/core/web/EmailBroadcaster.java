@@ -125,7 +125,7 @@ public class EmailBroadcaster {
 		
 		fromAddress = smtpConfigMap.getString("emailFrom", "");
 		fromName = smtpConfigMap.getString("emailFromName", "");
-
+		
 		String smtpUrl = smtpConfigMap.getString("host", "");
 		String[] parts = smtpUrl.split(":");
 		
@@ -194,16 +194,17 @@ public class EmailBroadcaster {
 			.ensure(inextraSendOptions);
 		
 		// Process "FROM" address field
-		String senderEmail = (fromAddress != null && !fromAddress.isEmpty()) ? fromAddress : this.fromAddress;
+		String senderEmail = (fromAddress != null && !fromAddress.isEmpty()) ? fromAddress
+			: this.fromAddress;
 		String senderName = (fromName != null && !fromName.isEmpty()) ? fromName : this.fromName;
 		InternetAddress sender;
-		if(senderName == null || senderName.isEmpty()){
+		if (senderName == null || senderName.isEmpty()) {
 			sender = new InternetAddress(senderEmail);
 		} else {
 			sender = new InternetAddress(senderEmail, senderName);
 		}
 		message.setFrom(sender);
-
+		
 		// Process "TO" address field
 		if (toAddresses == null || toAddresses.length <= 0) {
 			throw new Exception("Sending to email address is not allowed to be 'empty'");
@@ -288,16 +289,17 @@ public class EmailBroadcaster {
 		
 		return true;
 	}
-
+	
 	/**
 	 * Shorten convinence function (does not need testing, test the core function directly instead)
 	 **/
 	public boolean sendEmail(String subject, String htmlContent, String toAddresses[],
-	                         String ccAddresses[], String bccAddresses[], Map<String, String> fileAttachments,
-	                         String fromAddress, Map<String, Object> inextraSendOptions) throws Exception{
-		return sendEmail(subject, htmlContent, toAddresses, ccAddresses, bccAddresses, fileAttachments, fromAddress, null, inextraSendOptions);
+		String ccAddresses[], String bccAddresses[], Map<String, String> fileAttachments,
+		String fromAddress, Map<String, Object> inextraSendOptions) throws Exception {
+		return sendEmail(subject, htmlContent, toAddresses, ccAddresses, bccAddresses,
+			fileAttachments, fromAddress, null, inextraSendOptions);
 	}
-
+	
 	/**
 	 * Shorten convinence function (does not need testing, test the core function directly instead)
 	 **/
