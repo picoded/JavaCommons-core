@@ -161,28 +161,28 @@ public class NestedObjectUtil_test {
 	@Test
 	public void repackingForList() {
 		// Prepare the base map
-		Map<String,Object> baseMap = new HashMap<>();
-		baseMap.putAll( ConvertJSON.toMap("{ 'subList': [ 'a', 123, [ 456, 789 ] ] }") );
-
+		Map<String, Object> baseMap = new HashMap<>();
+		baseMap.putAll(ConvertJSON.toMap("{ 'subList': [ 'a', 123, [ 456, 789 ] ] }"));
+		
 		// Repack it
 		NestedObjectUtil.repackFullyQualifiedNameKeys(baseMap);
-
+		
 		// Validate the repacking
 		assertEquals("a", baseMap.get("subList[0]"));
 		assertEquals(123, baseMap.get("subList[1]"));
 		assertEquals(456, baseMap.get("subList[2][0]"));
 		assertEquals(789, baseMap.get("subList[2][1]"));
 	}
-
+	
 	@Test
 	public void repackingForMap() {
 		// Prepare the base map
-		Map<String,Object> baseMap = new HashMap<>();
-		baseMap.putAll( ConvertJSON.toMap("{ 'subMap': { 'a': 123, 'b': { 'c': 456 } } }") );
-
+		Map<String, Object> baseMap = new HashMap<>();
+		baseMap.putAll(ConvertJSON.toMap("{ 'subMap': { 'a': 123, 'b': { 'c': 456 } } }"));
+		
 		// Repack it
 		NestedObjectUtil.repackFullyQualifiedNameKeys(baseMap);
-
+		
 		// Validate the repacking
 		assertEquals(123, baseMap.get("subMap.a"));
 		assertEquals(456, baseMap.get("subMap.b.c"));

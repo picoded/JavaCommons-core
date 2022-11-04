@@ -115,7 +115,7 @@ public class CompareUtils {
 	public static int dynamicCompare(Object o1, Object o2) {
 		// Quick direct equality
 		// also works if both values is null
-		if( o1 == o2 ) {
+		if (o1 == o2) {
 			return 0;
 		}
 		

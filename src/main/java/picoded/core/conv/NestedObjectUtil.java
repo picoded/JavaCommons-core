@@ -195,7 +195,7 @@ public class NestedObjectUtil {
 		// Create a new keyset, as modifications will occur
 		// And we do not want a modification access exception
 		Set<K> keys = new HashSet<K>(inMap.keySet());
-
+		
 		// Iterate the key set accordingly
 		for (K key : keys) {
 			
@@ -290,88 +290,88 @@ public class NestedObjectUtil {
 	 **/
 	@SuppressWarnings("unchecked")
 	public static <K, V> void repackFullyQualifiedNameKeys(Map<K, V> inMap) {
-
+		
 		// Create a new keyset, as modifications will occur
 		// And we do not want a modification access exception
 		Set<K> keys = new HashSet<K>(inMap.keySet());
-
+		
 		// Iterate the key set accordingly
 		for (K key : keys) {
 			
 			// Get and process the key path
 			String keyStr = GenericConvert.toString(key, "");
-
+			
 			// Get the value type accordingly
 			V val = inMap.get(key);
-
+			
 			// Perform list repacking
-			if( val instanceof List ) {
-				repackFQN_list(inMap, keyStr, GenericConvert.toGenericConvertList(val) );
+			if (val instanceof List) {
+				repackFQN_list(inMap, keyStr, GenericConvert.toGenericConvertList(val));
 				inMap.remove(key);
 			}
-
+			
 			// Perform map repacking
-			if( val instanceof Map ) {
-				repackFQN_map(inMap, keyStr, GenericConvert.toGenericConvertStringMap(val) );
+			if (val instanceof Map) {
+				repackFQN_map(inMap, keyStr, GenericConvert.toGenericConvertStringMap(val));
 				inMap.remove(key);
 			}
-
+			
 			// Does nothing
 		}
 	}
-
+	
 	/** 
 	 * Helper function used internally for `repackFullyQualifiedNameKeys`
 	 */
-	private static <K, V, P> void repackFQN_list(Map<K,V> rootMap, String prefix, List<P> sublist) {
+	private static <K, V, P> void repackFQN_list(Map<K, V> rootMap, String prefix, List<P> sublist) {
 		// Lets iterate the list, and repack it
-		for(int i=0; i<sublist.size(); ++i) {
+		for (int i = 0; i < sublist.size(); ++i) {
 			// Prepare the new str key
-			String keyStr = prefix+"["+i+"]";
-
+			String keyStr = prefix + "[" + i + "]";
+			
 			// Get the value
 			P val = sublist.get(i);
-
+			
 			// Handle recursions
-			if( val instanceof List ) {
-				repackFQN_list(rootMap, keyStr, GenericConvert.toGenericConvertList(val) );
+			if (val instanceof List) {
+				repackFQN_list(rootMap, keyStr, GenericConvert.toGenericConvertList(val));
 			}
-			if( val instanceof Map ) {
-				repackFQN_map(rootMap, keyStr, GenericConvert.toGenericConvertStringMap(val) );
+			if (val instanceof Map) {
+				repackFQN_map(rootMap, keyStr, GenericConvert.toGenericConvertStringMap(val));
 			}
-
+			
 			// Flatten, and store the final values
 			MapOrListUtil.setValue(rootMap, keyStr, val);
 		}
 	}
-
+	
 	/** 
 	 * Helper function used internally for `repackFullyQualifiedNameKeys`
 	 */
-	private static <K, V, S, P> void repackFQN_map(Map<K,V> rootMap, String prefix, Map<S, P> submap) {
+	private static <K, V, S, P> void repackFQN_map(Map<K, V> rootMap, String prefix, Map<S, P> submap) {
 		// Iterate the submap keyset
 		Set<S> keys = submap.keySet();
 		for (S key : keys) {
 			
 			// Prepare the new str key
-			String keyStr = prefix+"."+GenericConvert.toString(key, "");
-
+			String keyStr = prefix + "." + GenericConvert.toString(key, "");
+			
 			// Get the value
 			P val = submap.get(key);
-
+			
 			// Handle recursions
-			if( val instanceof List ) {
-				repackFQN_list(rootMap, keyStr, GenericConvert.toGenericConvertList(val) );
+			if (val instanceof List) {
+				repackFQN_list(rootMap, keyStr, GenericConvert.toGenericConvertList(val));
 			}
-			if( val instanceof Map ) {
-				repackFQN_map(rootMap, keyStr, GenericConvert.toGenericConvertStringMap(val) );
+			if (val instanceof Map) {
+				repackFQN_map(rootMap, keyStr, GenericConvert.toGenericConvertStringMap(val));
 			}
-
+			
 			// Flatten, and store the final values
 			MapOrListUtil.setValue(rootMap, keyStr, val);
 		}
 	}
-
+	
 	//--------------------------------------------------------------------------------------------------
 	//
 	// Normalize object path, for case insensitive fetchNestedObject calls

@@ -21,7 +21,7 @@ public class ExceptionUtils_test {
 		String stackTrace = null;
 		try {
 			throw new RuntimeException("TEST EXCEPTION");
-		} catch(Exception e) {
+		} catch (Exception e) {
 			stackTrace = ExceptionUtils.getStackTrace(e);
 		}
 		assertNotNull(stackTrace);
