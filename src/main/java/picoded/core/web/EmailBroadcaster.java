@@ -272,11 +272,22 @@ public class EmailBroadcaster {
 			for (Map.Entry<String, String> entry : fileAttachments.entrySet()) {
 				MimeBodyPart messageBodyPart = new MimeBodyPart();
 				String key = entry.getKey();
-				String value = entry.getValue();
+				String filepath = entry.getValue();
 				
-				DataSource source = new FileDataSource(value);
+				String prefix = "inline:";
+				boolean isInline = filepath.startsWith(prefix);
+				if (isInline) {
+					filepath = filepath.substring(prefix.length());
+					messageBodyPart.setHeader("Content-ID", "<" + key + ">");
+					messageBodyPart.setDisposition(MimeBodyPart.INLINE);
+				} else {
+					messageBodyPart.setDisposition(MimeBodyPart.ATTACHMENT);
+				}
+				
+				DataSource source = new FileDataSource(filepath);
 				messageBodyPart.setDataHandler(new DataHandler(source));
 				messageBodyPart.setFileName(key);
+				
 				multipart.addBodyPart(messageBodyPart);
 			}
 		}
